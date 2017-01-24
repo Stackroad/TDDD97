@@ -1,4 +1,11 @@
-displayView = function(){
+displayView = function(nameOfPage){
+
+var openPage =	document.getElementById(nameOfPage).innerHTML;
+// console.log(openPage);
+
+document.getElementById('body').innerHTML = openPage;
+
+
  // the code required to display a view
 };
 window.onload = function(){
@@ -6,4 +13,5 @@ window.onload = function(){
  //You shall put your own custom code here.
  //window.alert() is not allowed to be used in your implementation.
  window.alert("Hello TDDD97!");
+ displayView("welcomeView");
 };
