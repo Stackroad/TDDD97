@@ -9,15 +9,15 @@
 
 			<img src="wimage.png" alt="logo" id="logo">
 
-			<form class="login">
+			<form class="login" method="POST" action="#" id="logInForm">
 				<div class="innerField">
 					<label for="email">Email</label>
-					<input type="text" name="email" id="email">
+					<input type="text" name="email" id="email" required>
 
 					<label for="password">Password</label>
-					<input type="text" name="password" id="password">
+					<input type="text" name="password" id="password" required>
 
-					<button id="knappen" type="button"> login </button>
+					<button id="logInPush" type="submit" value="loginButtom" name="loginButtom"> login </button>
 				</div>
 			</form>
 
