@@ -14,18 +14,21 @@ h2 {
 	float: left;
 }
 
+form {
+	margin-bottom: 0px;
+}
+
 .login {
 	height: 100px;
 	width: 250px;
 	overflow: hidden;
 	float: right;
 	background-color: white;
-	vertical-align: middle;
+	margin-bottom: 10px;
 }
 
 .innerField {
 	padding-top: 20px;
-
 }
 
 .signUp {
@@ -33,9 +36,7 @@ h2 {
 	width: 250px;
 	overflow: hidden;
 	float: right;
-	position: relative;
-	margin-top: 10px;
-	background-color: white	
+	background-color: white;
 }
 
 .rollBar {
@@ -48,8 +49,9 @@ input[type=text] {
 	display: inline-block;
 }
 
-#knappen {
-	float: right;
+#logInPush {
+	clear: right;
+	float: right;	
 }
 
 .container  {
