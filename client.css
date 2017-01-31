@@ -44,7 +44,17 @@ form {
 	float: right;
 	background-color: lightgrey;
 }
-input[type=text] {
+input[type=text]{
+	float: right;
+	display: inline-block;
+}
+
+input[type=password]{
+	float: right;
+	display: inline-block;
+}
+
+input[type=email]{
 	float: right;
 	display: inline-block;
 }
@@ -62,3 +72,11 @@ input[type=text] {
 	vertical-align: middle;
 }
 
+label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+label > span {
+	display: inline-block;
+}

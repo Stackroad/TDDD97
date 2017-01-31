@@ -13,11 +13,14 @@ function validateForm(event)
 {
 	console.log('Hejsan');
 	event.preventDefault();
-    // Validate email
-    var email = document.getElementById('email').value;
-    // if ((/(.+)@(.+){2,}\.(.+){2,}/.test(email)) || email=="" || email==null) { } else {
-    // 	alert("Please enter a valid email");
-    // }
+
+	var password = document.getElementById('password').value;
+	var limitLength = password.length;
+
+	if (limitLength < 5) {
+		console.log('Hejsan igen')
+		alert("FEEEEL");
+	}
 }
 
 var attachHandlersWelcome = function() {

@@ -11,29 +11,37 @@
 
 			<form class="login" method="POST" action="#" id="logInForm">
 				<div class="innerField">
-					<label for="email">Email</label>
-					<input type="text" name="email" id="email" required>
-
-					<label for="password">Password</label>
-					<input type="text" name="password" id="password" required>
-
+					<label for="email"><span>Email</span>
+					<input type="email" name="email" id="email" required>
+					<br>
+					</label>
+					<label for="password"><span>Password</span>
+					<input type="password" name="password" id="password" required>
+					<br>
+					</label>
 					<button id="logInPush" type="submit" value="loginButtom" name="loginButtom"> login </button>
 				</div>
 			</form>
 
 			<form class="signUp">
 				<h2>Sign up here</h2>
-				<label for="firstName">First Name</label>
+				<label for="firstName"><span>First Name</span>
 				<input type="text" name="firstName" id="firstName">
+				<br>
+				</label>
 
-				<label for="familyName">Family Name</label>
+				<label for="familyName"><span>Family Name</span>
 				<input type="text" name="familyName" id="familyName">
-				<label for="gender">Gender</label>
+				<br>
+				</label>
+
+
+				<label for="gender"><span>Gender</span>
 				<select class="rollBar" name="gender">
 					<option value="Male" selected>Male</option>
 					<option value="Female">Female</option>
 				</select><br>
-
+				</label>
 				<label for="city">City</label>
 				<input type="text" name="city" id="city"><br>
 
