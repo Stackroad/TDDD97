@@ -12,59 +12,115 @@
 			<form class="login" method="POST" action="#" id="logInForm">
 				<div class="innerField">
 					<label for="email"><span>Email</span>
-					<input type="email" name="email" id="email" required>
-					<br>
+						<input type="email" name="email" id="emailLogIn" required>
+						<br>
 					</label>
-					<label for="password"><span>Password</span>
-					<input type="password" name="password" id="password" required>
-					<br>
+					<label for="passwordLogIn"><span>Password</span>
+						<input type="password" name="passwordLogIn" id="passwordLogIn" required>
+						<br>
 					</label>
 					<button id="logInPush" type="submit" value="loginButtom" name="loginButtom"> login </button>
 				</div>
 			</form>
 
-			<form class="signUp">
+			<form class="signUp" method="POST" action="#" id="signUpForm">
+
 				<h2>Sign up here</h2>
 				<label for="firstName"><span>First Name</span>
-				<input type="text" name="firstName" id="firstName">
-				<br>
+					<input type="text" name="firstName" id="firstName" required>
+					<br>
 				</label>
 
 				<label for="familyName"><span>Family Name</span>
-				<input type="text" name="familyName" id="familyName">
-				<br>
+					<input type="text" name="familyName" id="familyName" required>
+					<br>
 				</label>
 
 
 				<label for="gender"><span>Gender</span>
-				<select class="rollBar" name="gender">
-					<option value="Male" selected>Male</option>
-					<option value="Female">Female</option>
-				</select><br>
+					<select class="rollBar" name="gender" id="gender">
+						<option value="Male" selected>Male</option>
+						<option value="Female">Female</option>
+					</select><br>
 				</label>
-				<label for="city">City</label>
-				<input type="text" name="city" id="city"><br>
 
-				<label for="country">Country</label>
-				<input type="text" name="country" id="country">
 
-				<label for="email">Email</label>
-				<input type="text" name="email" id="email">
+				<label for="city"><span>City</span>
+					<input type="text" name="city" id="city" required><br>
+				</label>
 
-				<label for="password">Password</label>
-				<input type="text" name="password" id="password">
+				<label for="country"><span>Country</span>
+					<input type="text" name="country" id="country" required><br>
+				</label>
 
-				<label for="repeatPSW">Repeat PSW</label>
-				<input type="text" name="repeatPSW" id="repeatPSW">
+				<label for="email"><span>Email</span>
+					<input type="email" name="email" id="email" required><br>
+				</label>
 
-				<button id="knappen" type="button"> SignUp </button>
+
+				<label for="password"><span>Password</span>
+					<input type="password" name="password" id="password" required><br>
+				</label>
+
+
+				<label for="repeatPSW"><span>Repeat PSW</span>
+					<input type="password" name="repeatPSW" id="repeatPSW" required><br>
+				</label>
+
+				<button id="signUpPush" type="submit" value="signUpButtom" name="signUpButtom"> SignUp </button>
+
 			</form>
 
 		</div>
 	</script>	
-</head>
-<body id="body" >
+	<script type="text/view" id="userView">
 
-</body>
+		<h1>HEJSAN USER</h1>
+		<body>
 
-</html>
+			<p>Click on the links inside the tabbed menu:</p>
+
+			<ul class="tab">
+				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Home')">Home</a></li>
+				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Browse')">Browse</a></li>
+				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Account')">Account</a></li>
+			</ul>
+
+			<div id="Home" class="tabcontent">
+				<h3>Homee32232</h3>
+				<p>London is the capital city of England.</p>
+			</div>
+
+			<div id="Browse" class="tabcontent">
+				<h3>Browse</h3>
+				<p>Paris is the capital of France.</p> 
+			</div>
+
+			<div id="Account" class="tabcontent">
+				<form class="changePass" method="POST" action="#" id="changePass">
+
+					<label for="oldPass"><span>Old password</span>
+						<input type="text" name="oldPass" id="oldPass" required>
+						<br>
+					</label>
+
+					<label for="newPass"><span>New password</span>
+						<input type="text" name="newPass" id="newPass" required>
+						<br>
+					</label>
+					<label for="repeatNewPass"><span>Repeat password</span>
+						<input type="text" name="repeatNewPass" id="repeatNewPass" required>
+						<br>
+					</label>
+					<button id="updatePassPush" type="submit" value="newPassButtom" name="newPassButtom"> Update password </button>
+
+				</form>
+			</div>
+		</script>	
+	</head>
+
+	<body id="body" >
+
+	</body>
+
+	</html>
