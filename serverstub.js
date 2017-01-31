@@ -121,6 +121,7 @@ var serverstub = (function() {
     },
 
     signUp: function(inputObject){ // {email, password, firstname, familyname, gender, city, country}
+     console.log('Nu är du i signUp serverstub')
       if (users[inputObject.email] === undefined){
         if(
           (typeof(inputObject.email) === 'string') &&
@@ -130,6 +131,7 @@ var serverstub = (function() {
           (typeof(inputObject.gender) === 'string') &&
           (typeof(inputObject.city) === 'string') &&
           (typeof(inputObject.country) === 'string')
+
         ) {
           var user = {
             'email': inputObject.email,
