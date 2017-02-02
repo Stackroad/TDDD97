@@ -134,10 +134,15 @@ ul.tab li a:focus, .active {
 	width: 300px;
 }
 
+
+.homeForm {
+}
+
 .browseUser {
 	width: 300px;
 }
 
 .postMessage {
+
 	width: 300px;
 }
