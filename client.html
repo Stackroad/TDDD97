@@ -131,7 +131,27 @@
 
 			<div id="Browse" class="tabcontent">
 				<h3>Browse</h3>
-				<p>Paris is the capital of France.</p> 
+				<form class="browseUser" method="POST" action="#" id="browseUser">
+
+					<label for="searchUser"><span>Enter user email</span>
+						<input type="text" name="searchUserEmail" id="searchUserEmail" required>
+						<br>
+					</label>
+
+					<button id="searchUserPush" type="submit" value="searchUserButtom" name="searchUserButtom"> Search </button>
+
+				</form>
+
+				<form class="postMessage" method="POST" action="#" id="postMessage">
+
+					<label for="postMessage"><span>Post a message</span>
+						<input type="text" name="postMessageUser" id="postMessageUser">
+						<br>
+					</label>
+
+					<button id="postMessagePush" type="submit" value="postMessageButtom" name="postMessageButtom"> Post Message </button>
+
+				</form>
 			</div>
 
 			<div id="Account" class="tabcontent">
@@ -153,6 +173,13 @@
 					<button id="updatePassPush" type="submit" value="newPassButtom" name="newPassButtom"> Update password </button>
 
 				</form>
+
+				<form class="logOut" method="POST" action="#" id="logOut">
+
+					<button id="logOutPush" type="submit" value="logOutButtom" name="logOutButtom"> Log Out </button>
+
+				</form>
+
 			</div>
 		</script>	
 	</head>

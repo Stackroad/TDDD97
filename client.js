@@ -42,6 +42,28 @@ function validateSignInForm(event)
 	}
 }
 
+function logOutForm(event) {
+	event.preventDefault();
+	
+	var token = localStorage.getItem("token");
+
+	var logOutCall = serverstub.signOut(token);
+	console.log(logOutCall)
+
+	var logOutSuccess = logOutCall.success;
+
+	if (tokenUserSuccess === false) {
+		alert(logOutCall.message)
+		console.log('Nu loggas du inte ut')
+	}
+	else {
+		alert(logOutCall.message)
+		displayView("welcomeView");
+		attachHandlersWelcome();
+		console.log('Nu loggas du ut')
+	}
+}
+
 function validateSignUpForm(event)
 {
 	console.log('HejsanSIGNUP');
@@ -130,49 +152,21 @@ function validateNewPassForm(event) {
 	else {
 		var token = localStorage.getItem("token");
 
-		console.log(newPass);
 
-		var changePassCall = serverstub.changePassword(token, oldPass, newPass);
-		console.log(changePassCall);
+		var changePassCall = serverstub.changePassword(token, oldPass, newPass)
+		console.log(changePassCall)
+
 
 
 	}
 }
+
 
 function validateHomeForm(event) {
 	event.preventDefault();
 
-	// var newPass = document.getElementById('newPass').value;
-	// var repeatNewPass = document.getElementById('repeatNewPass').value;
-	// var oldPass = document.getElementById('oldPass').value;
-	// var limitLength = newPass.length;
-
-	// if (limitLength < 5) {
-	// 	alert('Lösenordet måste innehålla minst 6 tecken');
-	// }
-	// else if (newPass != repeatNewPass) {
-	// 	alert('De två lösenorden stämmer inte överens');
-	// }
-	// else {
-	// 	var token = localStorage.getItem("token");
-
-	// 	console.log(newPass);
-
-	// 	var changePassCall = serverstub.changePassword(token, oldPass, newPass);
-	// 	console.log(changePassCall);
-
-
-	// }
 }
 
-var attachHandlersUser = function() {
-
-	var updatePassForm = document.getElementById("changePass");
-
-	if (updatePassForm !== null) {
-		updatePassForm.addEventListener('submit', validateNewPassForm);
-	}
-};
 
 var attachHandlersHome = function() {
 
@@ -182,6 +176,54 @@ var attachHandlersHome = function() {
 		updatePassForm.addEventListener('submit', validateHomeForm);
 	}
 };
+
+function searchUserForm(event) {
+	event.preventDefault();
+
+	var searchUserEmail = document.getElementById("searchUserEmail").value;
+
+	console.log(searchUserEmail)
+	var token = localStorage.getItem("token");
+
+	var searchUserData = serverstub.getUserDataByEmail(token, searchUserEmail);
+	console.log(searchUserData)
+}	
+
+function postMessageForm(event) {
+	event.preventDefault();
+
+	var textMessage = document.getElementById("postMessage").value;
+
+	console.log(searchUserEmail)
+	var token = localStorage.getItem("token");
+	var toEmail = document.getElementById("searchUserEmail").value;
+	console.log(toEmail)
+	var postMessage = serverstub.postMessage(token, textMessage, toEmail );
+	console.log(postMessage)
+}
+
+
+var attachHandlersUser = function() {
+
+	var updatePassForm = document.getElementById("changePass")
+	var logOutPush = document.getElementById("logOut")
+	var searchUserPush = document.getElementById("browseUser")
+	var postMessage = document.getElementById("postMessage")
+
+	if (searchUserPush != null) {
+		searchUserPush.addEventListener('submit', searchUserForm)
+	}
+	if (updatePassForm != null) {
+		updatePassForm.addEventListener('submit', validateNewPassForm);
+	}
+	if (logOutPush != null) {
+		logOutPush.addEventListener('submit', logOutForm);
+	}
+	if (postMessage != null) {
+		postMessage.addEventListener('submit', postMessageForm);
+	}
+}
+
 
 var attachHandlersWelcome = function() {
 
