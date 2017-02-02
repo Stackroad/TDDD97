@@ -27,11 +27,11 @@ function validateSignInForm(event)
 		tokenUser = loginObject.data;
 		tokenUserSuccess = loginObject.success;
 
-		console.log(tokenUser)
+		console.log(tokenUser);
 		localStorage.setItem("token", tokenUser);
 
 		if (tokenUserSuccess === false) {
-			alert('Wrong password or email')
+			alert('Wrong password or email');
 		}
 		else {
 			displayView("userView");
@@ -62,7 +62,7 @@ function validateSignUpForm(event)
 	if (limitLength < 5) {
 		alert('Lösenordet måste innehålla minst 6 tecken');
 	}
-	else if (repeatPSW =! password) {
+	else if (repeatPSW !== password) {
 		alert('De två lösenorden stämmer inte överens');
 	}
 	else {
@@ -70,8 +70,8 @@ function validateSignUpForm(event)
 		// var formData = new FormData(signUpCall);
 
 		var signUpCall = serverstub.signUp(objectSignUp);
-		console.log(objectSignUp)
-		console.log(signUpCall)
+		console.log(objectSignUp);
+		console.log(signUpCall);
 		//alert(JSON.stringify(signUpCall));
 		// JSON.parse(document.getElementById('signUpForm'))
 	}
@@ -90,6 +90,27 @@ function openTab(evt, tabName) {
 	}
 	document.getElementById(tabName).style.display = "block";
 	evt.currentTarget.className += " active";
+
+	if(tabName === 'Home'){
+		var token = localStorage.getItem("token");
+		userInfo = serverstub.getUserDataByToken(token);
+
+		//är detta "snyggare?"
+		// var name2 = test2.data.firstname;
+		// document.getElementById("firstName").value = name2
+
+		
+ document.getElementById("firstName").value = userInfo.data.firstname;
+ document.getElementById("familyName").value = userInfo.data.familyname;
+ document.getElementById("gender").value = userInfo.data.gender;
+ document.getElementById("city").value = userInfo.data.city;
+ document.getElementById("country").value = userInfo.data.country;
+ document.getElementById("email").value = userInfo.data.email;
+
+
+
+
+	}
 }
 
 function validateNewPassForm(event) {
@@ -103,48 +124,83 @@ function validateNewPassForm(event) {
 	if (limitLength < 5) {
 		alert('Lösenordet måste innehålla minst 6 tecken');
 	}
-	else if (newPass =! repeatNewPass) {
+	else if (newPass != repeatNewPass) {
 		alert('De två lösenorden stämmer inte överens');
 	}
 	else {
 		var token = localStorage.getItem("token");
 
-		console.log(newPass)
+		console.log(newPass);
 
-		var changePassCall = serverstub.changePassword(token, oldPass, newPass)
-		console.log(changePassCall)
+		var changePassCall = serverstub.changePassword(token, oldPass, newPass);
+		console.log(changePassCall);
 
 
 	}
+}
+
+function validateHomeForm(event) {
+	event.preventDefault();
+
+	// var newPass = document.getElementById('newPass').value;
+	// var repeatNewPass = document.getElementById('repeatNewPass').value;
+	// var oldPass = document.getElementById('oldPass').value;
+	// var limitLength = newPass.length;
+
+	// if (limitLength < 5) {
+	// 	alert('Lösenordet måste innehålla minst 6 tecken');
+	// }
+	// else if (newPass != repeatNewPass) {
+	// 	alert('De två lösenorden stämmer inte överens');
+	// }
+	// else {
+	// 	var token = localStorage.getItem("token");
+
+	// 	console.log(newPass);
+
+	// 	var changePassCall = serverstub.changePassword(token, oldPass, newPass);
+	// 	console.log(changePassCall);
+
+
+	// }
 }
 
 var attachHandlersUser = function() {
 
-	var updatePassForm = document.getElementById("changePass")
+	var updatePassForm = document.getElementById("changePass");
 
-	if (updatePassForm != null) {
+	if (updatePassForm !== null) {
 		updatePassForm.addEventListener('submit', validateNewPassForm);
 	}
-}
+};
+
+var attachHandlersHome = function() {
+
+	var updateHomeForm = document.getElementById("homeForm");
+
+	if (updateHomeForm !== null) {
+		updatePassForm.addEventListener('submit', validateHomeForm);
+	}
+};
 
 var attachHandlersWelcome = function() {
 
-	var logInForm = document.getElementById("logInForm")
+	var logInForm = document.getElementById("logInForm");
 
-	var signUpForm = document.getElementById("signUpForm")
+	var signUpForm = document.getElementById("signUpForm");
 
 
 
-	if (logInForm != null) {
+	if (logInForm !== null) {
 		logInForm.addEventListener('submit', validateSignInForm);
 	}
 
-	if (signUpForm != null) {
+	if (signUpForm !== null) {
 		signUpForm.addEventListener('submit', validateSignUpForm);
 	}
 
 
-}
+};
 
 
 window.onload = function(){

@@ -6,7 +6,7 @@
  * If you're a student, you shouldn't need to look through this file,
  *  the description of how it works is in the lab instructions.
  **/
-var serverstub = (function() {
+ var serverstub = (function() {
   'use strict';
 
   var users;
@@ -121,55 +121,58 @@ var serverstub = (function() {
     },
 
     signUp: function(inputObject){ // {email, password, firstname, familyname, gender, city, country}
-     console.log('Nu är du i signUp serverstub')
-      if (users[inputObject.email] === undefined){
-        if(
-          (typeof(inputObject.email) === 'string') &&
-          (typeof(inputObject.password) === 'string') &&
-          (typeof(inputObject.firstname) === 'string') &&
-          (typeof(inputObject.familyname) === 'string') &&
-          (typeof(inputObject.gender) === 'string') &&
-          (typeof(inputObject.city) === 'string') &&
-          (typeof(inputObject.country) === 'string')
+    console.log('Nu är du i signUp serverstub')
+    if (users[inputObject.email] === undefined){
+      if(
+        (typeof(inputObject.email) === 'string') &&
+        (typeof(inputObject.password) === 'string') &&
+        (typeof(inputObject.firstname) === 'string') &&
+        (typeof(inputObject.familyname) === 'string') &&
+        (typeof(inputObject.gender) === 'string') &&
+        (typeof(inputObject.city) === 'string') &&
+        (typeof(inputObject.country) === 'string')
 
         ) {
-          var user = {
-            'email': inputObject.email,
-            'password': inputObject.password,
-            'firstname': inputObject.firstname,
-            'familyname': inputObject.familyname,
-            'gender': inputObject.gender,
-            'city': inputObject.city,
-            'country': inputObject.country,
-            'messages': []
-          };
-            users[inputObject.email] = user;
-            persistUsers();
-            return {"success": true, "message": "Successfully created a new user."};
-        } else {
-          return {"success": false, "message": "Form data missing or incorrect type."};
-        }
-
+        var user = {
+          'email': inputObject.email,
+          'password': inputObject.password,
+          'firstname': inputObject.firstname,
+          'familyname': inputObject.familyname,
+          'gender': inputObject.gender,
+          'city': inputObject.city,
+          'country': inputObject.country,
+          'messages': []
+        };
+        users[inputObject.email] = user;
+        persistUsers();
+        return {"success": true, "message": "Successfully created a new user."};
       } else {
-        return {"success": false, "message": "User already exists."};
+        return {"success": false, "message": "Form data missing or incorrect type."};
       }
-    },
 
-    changePassword: function(token, oldPassword, newPassword){
-      if (loggedInUsers[token] != null){
-        var email = tokenToEmail(token);
-        if (users[email].password == oldPassword){
-          users[email].password = newPassword;
-          persistUsers();
-          return {"success": true, "message": "Password changed."};
-        } else {
-          return {"success": false, "message": "Wrong password."};
-        }
-      } else {
-        return {"success": false, "message": "You are not logged in."};
-      }
+    } else {
+      return {"success": false, "message": "User already exists."};
     }
-  };
+  },
 
-  return serverstub;
+  changePassword: function(token, oldPassword, newPassword){
+    if (loggedInUsers[token] != null){
+      var email = tokenToEmail(token);
+      if (users[email].password == oldPassword){
+        users[email].password = newPassword;
+        persistUsers();
+        return {"success": true, "message": "Password changed."};
+      } else {
+        return {"success": false, "message": "Wrong password."};
+      }
+    } else {
+      return {"success": false, "message": "You are not logged in."};
+
+    }
+    console.log(newPassword)
+  }
+
+};
+
+return serverstub;
 })();
