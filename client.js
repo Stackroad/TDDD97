@@ -122,12 +122,12 @@ function openTab(evt, tabName) {
 		// document.getElementById("firstName").value = name2
 
 		
- document.getElementById("firstName").value = userInfo.data.firstname;
- document.getElementById("familyName").value = userInfo.data.familyname;
- document.getElementById("gender").value = userInfo.data.gender;
- document.getElementById("city").value = userInfo.data.city;
- document.getElementById("country").value = userInfo.data.country;
- document.getElementById("email").value = userInfo.data.email;
+		document.getElementById("firstName").value = userInfo.data.firstname;
+		document.getElementById("familyName").value = userInfo.data.familyname;
+		document.getElementById("gender").value = userInfo.data.gender;
+		document.getElementById("city").value = userInfo.data.city;
+		document.getElementById("country").value = userInfo.data.country;
+		document.getElementById("email").value = userInfo.data.email;
 
 
 
@@ -185,21 +185,49 @@ function searchUserForm(event) {
 	console.log(searchUserEmail)
 	var token = localStorage.getItem("token");
 
-	var searchUserData = serverstub.getUserDataByEmail(token, searchUserEmail);
+	searchUserData = serverstub.getUserDataByEmail(token, searchUserEmail);
 	console.log(searchUserData)
+	console.log(searchUserData.data.firstname)
+
+	document.getElementById("firstNameSearch").value = searchUserData.data.firstname;
+	document.getElementById("familyNameSearch").value = searchUserData.data.familyname;
+	document.getElementById("genderSearch").value = searchUserData.data.gender;
+	document.getElementById("citySearch").value = searchUserData.data.city;
+	document.getElementById("countrySearch").value = searchUserData.data.country;
+	document.getElementById("emailSearch").value = searchUserData.data.email;
+
+	updateWall(token, searchUserEmail);
 }	
 
 function postMessageForm(event) {
 	event.preventDefault();
 
-	var textMessage = document.getElementById("postMessage").value;
+	var textMessage = document.getElementById("postMessageUser").value;
 
 	console.log(searchUserEmail)
 	var token = localStorage.getItem("token");
 	var toEmail = document.getElementById("searchUserEmail").value;
 	console.log(toEmail)
-	var postMessage = serverstub.postMessage(token, textMessage, toEmail );
-	console.log(postMessage)
+	var postMessageWall = serverstub.postMessage(token, textMessage, toEmail );
+	console.log(postMessageWall.message)
+	updateWall(token, toEmail);
+
+}
+
+function updateWall(token, email) {
+	event.preventDefault();
+
+	 theWall = serverstub.getUserMessagesByEmail(token, email);
+
+for (var i = theWall.data.length - 1; i >= 0; i--) {
+
+	var insert = theWall.data[i].content;
+	var preInsert = document.getElementById("wallSearch").value;
+	document.getElementById("wallSearch").value = [preInsert insert]
+}
+
+	console.log(theWall.data)
+
 }
 
 
