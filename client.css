@@ -143,6 +143,10 @@ ul.tab li a:focus, .active {
 }
 
 .postMessage {
+	width: 400px;
+}
 
-	width: 300px;
+#wallSearch {
+	width: 200px;
+	height: 200px;
 }
