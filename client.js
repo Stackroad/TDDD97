@@ -217,16 +217,32 @@ function postMessageForm(event) {
 function updateWall(token, email) {
 	event.preventDefault();
 
-	 theWall = serverstub.getUserMessagesByEmail(token, email);
+	document.getElementById("updateWall").innerHTML = "<b>bold text?</b>";
 
-for (var i = theWall.data.length - 1; i >= 0; i--) {
+	theWall = serverstub.getUserMessagesByEmail(token, email);
 
+// for (i = 0; i < cars.length; i++) { 
+//     text += cars[i] + "<br>";
+// }
+
+var stopCondition = theWall.data.length;
+
+for (i = 0; i < stopCondition; i++) {
+	console.log(i)
 	var insert = theWall.data[i].content;
-	var preInsert = document.getElementById("wallSearch").value;
-	document.getElementById("wallSearch").value = [preInsert insert]
+	var insertFromUser = theWall.data[i].user;
+	// var preInsert = document.getElementById("wallSearch").value;
+	// document.getElementById("wallSearch").value += insert;
+	console.log(insert)
+
+
+	if (typeof insert === 'string' || insert instanceof String)
+		document.getElementById("updateWall").innerHTML += insert + "<br>";
+
+
 }
 
-	console.log(theWall.data)
+console.log(theWall.data)
 
 }
 
