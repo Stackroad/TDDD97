@@ -15,20 +15,22 @@ def before_request():
 def teardown_request(exception):
     database_helper.close_db(database_helper.DEFAULT)
 
-
-
 @app.route('/')
 def hello_world():
     print ('Hejsan')
     return 'Welcome to TWIDDER'
 
-
-@app.route('/signup', methods=['POST'])
+@app.route('/mainTest', methods=['POST'])
 def signup():
     request.get_json()
-    name = request.get_json().get('name')
-    print (name)
-    result = database_helper.sign_up(name)
+    name = request.get_json().get('email')
+    password = request.get_json().get('password')
+    firstname = request.get_json().get('firstname')
+    familyname = request.get_json().get('familyname')
+    gender = request.get_json().get('gender')
+    city = request.get_json().get('city')
+    country = request.get_json().get('country')
+    result = database_helper.mainTest(name, password, firstname, familyname, gender, city, country)
     if result == True:
         return 'contact added', 200
     else:
@@ -44,4 +46,4 @@ def signup():
 
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run()
