@@ -122,7 +122,7 @@
 
     signUp: function(inputObject){ // {email, password, firstname, familyname, gender, city, country}
 
-
+    console.log('Nu är du i signUp serverstub')
     if (users[inputObject.email] === undefined){
       if(
         (typeof(inputObject.email) === 'string') &&
@@ -171,7 +171,7 @@
       return {"success": false, "message": "You are not logged in."};
 
     }
-
+    console.log(newPassword)
   }
 
 };

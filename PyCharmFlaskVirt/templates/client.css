@@ -47,16 +47,19 @@ form {
 input[type=text]{
 	float: right;
 	display: inline-block;
+	font-size: 70%;
 }
 
 input[type=password]{
 	float: right;
 	display: inline-block;
+	font-size: 70%;	
 }
 
 input[type=email]{
 	float: right;
 	display: inline-block;
+	font-size: 70%;	
 }
 
 #logInPush {
@@ -68,7 +71,10 @@ input[type=email]{
 	clear: right;
 	float: right;	
 }
-
+.alertMess {
+	font-size: 50%;
+	color: red;
+}
 
 .container  {
 	margin: auto;
