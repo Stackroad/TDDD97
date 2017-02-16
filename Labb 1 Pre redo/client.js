@@ -17,7 +17,7 @@ function validateSignInForm(event)
 
 	if (limitLength < 5) {
 		document.getElementById("alertSignIn").innerHTML =
-		 "<b>Password must contain atleast 6 characters </b>";
+		"<b>Password must contain atleast 6 characters </b>";
 	}
 	else {
 		var loginObject = serverstub.signIn(emailLogIn, passwordLogIn);
@@ -29,7 +29,7 @@ function validateSignInForm(event)
 
 		if (tokenUserSuccess === false) {
 			document.getElementById("alertSignIn").innerHTML =
-		 "<b>Could not sign in</b>";
+			"<b>Could not sign in</b>";
 		}
 		else {
 			displayView("userView");
@@ -77,12 +77,12 @@ function validateSignUpForm(event)
 
 	if (limitLength < 5) {
 		document.getElementById("alertSignUp").innerHTML =
-		 "<b>Password must contain atleast 5 characters</b>";
+		"<b>Password must contain atleast 5 characters</b>";
 
 	}
 	else if (repeatPSW !== password) {
 		document.getElementById("alertSignUp").innerHTML =
-		 "<b>Passwords dont match</b>";
+		"<b>Passwords dont match</b>";
 	}
 	else {
 		var signUpCall = serverstub.signUp(objectSignUp);
@@ -90,8 +90,8 @@ function validateSignUpForm(event)
 		console.log(signUpCall);
 		
 		displayView("welcomeView");
-			document.getElementById("alertSignUp").innerHTML =
-		 "<b>Successfully signed up!</b>";
+		document.getElementById("alertSignUp").innerHTML =
+		"<b>Successfully signed up!</b>";
 		attachHandlersWelcome();
 	}
 
@@ -113,7 +113,7 @@ function openTab(evt, tabName) {
 	if(tabName === 'Home'){
 		var token = localStorage.getItem("token");
 		userInfo = serverstub.getUserDataByToken(token);
-	
+		
 		document.getElementById("firstName").value = userInfo.data.firstname;
 		document.getElementById("familyName").value = userInfo.data.familyname;
 		document.getElementById("gender").value = userInfo.data.gender;
@@ -134,19 +134,30 @@ function validateNewPassForm(event) {
 	var repeatNewPass = document.getElementById('repeatNewPass').value;
 	var oldPass = document.getElementById('oldPass').value;
 	var limitLength = newPass.length;
+	// var passwordLogIn = document.getElementById('passwordLogIn').value;
 
 	if (limitLength < 5) {
 		document.getElementById("alertNewPass").innerHTML =
-		 "<b>Password must contain atleast 6 characters </b>";
-	
+		"<b>Password must contain atleast 6 characters </b>";
 	}
+
 	else if (newPass != repeatNewPass) {
 		document.getElementById("alertNewPass").innerHTML =
-		 "<b>New password not repeted correctly</b>";
+		"<b>New password not repeted correctly</b>";
 	}
 	else {
 		var token = localStorage.getItem("token");
 		var changePassCall = serverstub.changePassword(token, oldPass, newPass);
+		if (changePassCall === false){
+			console.log(changePassCall);
+			document.getElementById("alertNewPass").innerHTML =
+			"<b>Old password is wrong</b>";
+		}
+		else {
+			document.getElementById("alertNewPass").innerHTML =
+			"<b>Password changed</b>";
+		}
+
 	}
 }
 
@@ -194,12 +205,12 @@ function updateWall(token, email) {
 		var insert = theWall.data[i].content;
 		var insertFromUser = theWall.data[i].user;
 
-	if (typeof insert === 'string' || insert instanceof String)
-		document.getElementById("updateWall").innerHTML += "<div id='wallstyleInner'>"+
-		 "<b>Message"+" " +(stopCondition-i) + "</b>"+"<div>"+
-		 "<div id='wallstyle'>" +insert +
-		  "<div> <br>";
-}
+		if (typeof insert === 'string' || insert instanceof String)
+			document.getElementById("updateWall").innerHTML += "<div id='wallstyleInner'>"+
+		"<b>Message"+" " +(stopCondition-i) + "</b>"+"<div>"+
+		"<div id='wallstyle'>" +insert +
+		"<div> <br>";
+	}
 
 }
 
@@ -217,13 +228,13 @@ function refreshWall(token, email) {
 		var insert = theWall.data[i].content;
 		var insertFromUser = theWall.data[i].user;
 
-	if (typeof insert === 'string' || insert instanceof String)
-		document.getElementById("updateWallRefresh").innerHTML +=
-	"<div id='wallstyleInner'>"+
-		 "<b>Message"+" " +(stopCondition-i) + "</b>"+"<div>"+
-		 "<div id='wallstyle'>" +insert +
-		  "<div> <br>";
-}
+		if (typeof insert === 'string' || insert instanceof String)
+			document.getElementById("updateWallRefresh").innerHTML +=
+		"<div id='wallstyleInner'>"+
+		"<b>Message"+" " +(stopCondition-i) + "</b>"+"<div>"+
+		"<div id='wallstyle'>" +insert +
+		"<div> <br>";
+	}
 
 
 
@@ -292,7 +303,7 @@ var attachHandlersWelcome = function() {
 
 
 window.onload = function(){
- displayView("welcomeView");
- attachHandlersWelcome();
+	displayView("welcomeView");
+	attachHandlersWelcome();
 
 };
