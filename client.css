@@ -136,6 +136,7 @@ ul.tab li a:focus, .active {
 
 
 .homeForm {
+	float: left;
 }
 
 .browseUser {
@@ -143,10 +144,28 @@ ul.tab li a:focus, .active {
 }
 
 .postMessage {
-	width: 400px;
+
+	width: 300px;
 }
 
 #wallSearch {
 	width: 200px;
 	height: 200px;
 }
+#updateWallRefresh{
+	clear: left;
+	float: left;
+}
+
+#wallstyle{
+	width: 200px;
+	height: 150px;
+	background-color: white; 
+	margin-bottom: 10px;
+}
+
+#wallstyleInner{
+	background-color: lightgreen;
+	width: 200px;
+}
+
