@@ -16,8 +16,7 @@ function validateSignInForm(event)
 	var limitLength = passwordLogIn.length;
 
 	if (limitLength < 5) {
-		document.getElementById("alertSignIn").innerHTML =
-		 "<b>Password must contain atleast 6 characters </b>";
+		alert('Lösenordet måste innehålla minst 6 tecken');
 	}
 	else {
 		var loginObject = serverstub.signIn(emailLogIn, passwordLogIn);
@@ -28,8 +27,7 @@ function validateSignInForm(event)
 		localStorage.setItem("token", tokenUser);
 
 		if (tokenUserSuccess === false) {
-			document.getElementById("alertSignIn").innerHTML =
-		 "<b>Could not sign in</b>";
+			alert('Wrong password or email');
 		}
 		else {
 			displayView("userView");
@@ -48,14 +46,14 @@ function logOutForm(event) {
 	var logOutSuccess = logOutCall.success;
 
 	if (tokenUserSuccess === false) {
-		
-		console.log('Nu loggas du inte ut');
+		alert(logOutCall.message)
+		console.log('Nu loggas du inte ut')
 	}
 	else {
-		
+		alert(logOutCall.message)
 		displayView("welcomeView");
 		attachHandlersWelcome();
-		console.log('Nu loggas du ut');
+		console.log('Nu loggas du ut')
 	}
 }
 
@@ -72,27 +70,20 @@ function validateSignUpForm(event)
 	var city = document.getElementById('city').value;
 	var country = document.getElementById('country').value;
 	var email = document.getElementById('email').value;
-	var objectSignUp = {email, password, firstname, familyname, gender, city, country};
+	var objectSignUp = {"email":email, "password":password, "firstname":firstname,
+		"familyname":familyname, "gender":gender, "city":city, "country":country};
 	var limitLength = password.length;
 
 	if (limitLength < 5) {
-		document.getElementById("alertSignUp").innerHTML =
-		 "<b>Password must contain atleast 5 characters</b>";
-
+		alert('Lösenordet måste innehålla minst 6 tecken');
 	}
 	else if (repeatPSW !== password) {
-		document.getElementById("alertSignUp").innerHTML =
-		 "<b>Passwords dont match</b>";
+		alert('De två lösenorden stämmer inte överens');
 	}
 	else {
 		var signUpCall = serverstub.signUp(objectSignUp);
 		console.log(objectSignUp);
 		console.log(signUpCall);
-		
-		displayView("welcomeView");
-			document.getElementById("alertSignUp").innerHTML =
-		 "<b>Successfully signed up!</b>";
-		attachHandlersWelcome();
 	}
 
 }
@@ -136,13 +127,10 @@ function validateNewPassForm(event) {
 	var limitLength = newPass.length;
 
 	if (limitLength < 5) {
-		document.getElementById("alertNewPass").innerHTML =
-		 "<b>Password must contain atleast 6 characters </b>";
-	
+		alert('Lösenordet måste innehålla minst 6 tecken');
 	}
 	else if (newPass != repeatNewPass) {
-		document.getElementById("alertNewPass").innerHTML =
-		 "<b>New password not repeted correctly</b>";
+		alert('De två lösenorden stämmer inte överens');
 	}
 	else {
 		var token = localStorage.getItem("token");
@@ -292,6 +280,10 @@ var attachHandlersWelcome = function() {
 
 
 window.onload = function(){
+ //code that is executed as the page is loaded.
+ //You shall put your own custom code here.
+ //window.alert() is not allowed to be used in your implementation.
+ // window.alert("Hello TDDD97!");
  displayView("welcomeView");
  attachHandlersWelcome();
 

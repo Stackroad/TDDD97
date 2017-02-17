@@ -19,3 +19,9 @@ CREATE TABLE if NOT EXISTS  logged_in_users2(
                             token VARCHAR (120),
                             email VARCHAR(120),
                             PRIMARY KEY(token) );
+
+CREATE TABLE if NOT EXISTS  messages(
+                            fromUser VARCHAR (120),
+                            message VARCHAR (120),
+                            toUser VARCHAR (120) );
+
