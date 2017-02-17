@@ -1,0 +1,9 @@
+{
+	"email" : "per@hello.com",
+	"password" : "hejsan",
+	"firstname" : "Per",
+	"familyname" : "Welander",
+	"gender" : "man",
+	"city" : "Varberg",
+	"country" : "Sweden"
+}

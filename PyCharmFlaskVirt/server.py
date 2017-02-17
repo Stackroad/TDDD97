@@ -32,13 +32,15 @@ def sign_in():
         result = database_helper.get_user(email)
         print(result)
         if result == password:
-            return 'User found', 200
-        token = uuid.uuid4().hex
-        added_user = database_helper.sign_in_user(token, email)
-        if added_user == True:
-            return 'User succesfully signe in', 200
+            token = uuid.uuid4().hex
+            print(token)
+            added_user = database_helper.sign_in_user(token, email)
+            if added_user == True:
+                return 'User succesfully signed in', 200
+            else:
+                return 'Could nog sign in', 501
         else:
-            return 'Could nog sign in', 501
+            return 'User not found', 200
 
 
 # skapa tpoken och lagra i logged in users table
@@ -76,6 +78,38 @@ def sign_out():
         else:
             return 'could not sign out', 501
 
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    if request.method == 'POST':
+        request.get_json()
+        token = request.get_json().get('token')
+        old_password = request.get_json().get('old_password')
+        new_password = request.get_json().get('new_password')
+        email = database_helper.get_user_email(token)
+        verify_pass = database_helper.get_user(email)
+        if verify_pass == old_password:
+            result = database_helper.new_password(new_password,email)
+            if result == True:
+                return 'Changed password', 200
+            else:
+                return 'could not change password', 501
+        else:
+            return 'Old password does not match', 501
+
+@app.route('/get_user_data_by_token', methods=['POST'])
+def get_user_data_by_token():
+    if request.method == 'POST':
+        request.get_json()
+        token = request.get_json().get('token')
+        result = database_helper.get_user_data_by_token(token)
+        print result
+        if result == False:
+            return 'User data could not be accessed', 501
+        else:
+            return  'email: {}, firstname: {},familyname: {}, gender: {}, city: {}, country: {}'.format(result[0], result[2], result[3], result[4], result[5], result[6])
+
+
+# ['email':result[0], 'firstname':result[1], 'familyname':result[2], 'gender':result[3], 'city':result[4], 'country':result[5]]
 
 if __name__ == '__main__':
     app.run()
