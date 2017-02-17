@@ -1,0 +1,228 @@
+<html>
+<head>
+	<link href="client.css" type="text/css" rel="stylesheet">
+	<script src="client.js" type="text/javascript"></script>
+	<script src="serverstub.js" type="text/javascript"></script>
+
+	<script type="text/view" id="welcomeView">
+		<div class="container">
+
+			<img src="wimage.png" alt="logo" id="logo">
+
+			<form class="login" method="POST" action="#" id="logInForm">
+				<div class="innerField">
+					<label for="email"><span>Email</span>
+						<input type="email" name="email" id="emailLogIn" required>
+						<br>
+					</label>
+					<label for="passwordLogIn"><span>Password</span>
+						<input type="password" name="passwordLogIn" id="passwordLogIn" required>
+						<br>
+					</label>
+					<button id="logInPush" type="submit" value="loginButtom" name="loginButtom"> login </button>
+				</div>
+			</form>
+
+			<form class="signUp" method="POST" action="#" id="signUpForm">
+
+				<h2>Sign up here</h2>
+				<label for="firstName"><span>First Name</span>
+					<input type="text" name="firstName" id="firstName" required>
+					<br>
+				</label>
+
+				<label for="familyName"><span>Family Name</span>
+					<input type="text" name="familyName" id="familyName" required>
+					<br>
+				</label>
+
+
+				<label for="gender"><span>Gender</span>
+					<select class="rollBar" name="gender" id="gender">
+						<option value="Male" selected>Male</option>
+						<option value="Female">Female</option>
+					</select><br>
+				</label>
+
+
+				<label for="city"><span>City</span>
+					<input type="text" name="city" id="city" required><br>
+				</label>
+
+				<label for="country"><span>Country</span>
+					<input type="text" name="country" id="country" required><br>
+				</label>
+
+				<label for="email"><span>Email</span>
+					<input type="email" name="email" id="email" required><br>
+				</label>
+
+
+				<label for="password"><span>Password</span>
+					<input type="password" name="password" id="password" required><br>
+				</label>
+
+
+				<label for="repeatPSW"><span>Repeat PSW</span>
+					<input type="password" name="repeatPSW" id="repeatPSW" required><br>
+				</label>
+
+				<button id="signUpPush" type="submit" value="signUpButtom" name="signUpButtom"> SignUp </button>
+
+			</form>
+
+		</div>
+	</script>	
+	<script type="text/view" id="userView">
+
+		<h1>HEJSAN USER</h1>
+		<body>
+
+			<p>Click on the links inside the tabbed menu:</p>
+
+			<ul class="tab">
+				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Home')">Home</a></li>
+				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Browse')">Browse</a></li>
+				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Account')">Account</a></li>
+			</ul>
+
+			<div id="Home" class="tabcontent">
+				<h3>Personal information</h3>
+				<form class="homeForm" method="POST" action="#" id="homeForm" >
+
+					<label for="firstName"><span>First Name</span>
+						<input type="text" name="firstName" id="firstName" value="" readonly>
+						<br>
+					</label>
+
+					<label for="familyName"><span>Family Name</span>
+						<input type="text" name="familyName" id="familyName" readonly>
+						<br>
+					</label>
+
+					<label for="gender"><span>Gender</span>
+						<input type="text" name="gender" id="gender" readonly>
+						<br>
+					</label>
+
+					<label for="city"><span>City</span>
+						<input type="text" name="city" id="city" readonly><br>
+					</label>
+
+					<label for="country"><span>Country</span>
+						<input type="text" name="country" id="country" readonly><br>
+					</label>
+
+					<label for="email"><span>Email</span>
+						<input type="email" name="email" id="email" readonly><br>
+					</label>
+
+					<button id="refresh" type="submit" value="refreshButtom" name="refreshButtom"> Refresh wall </button>
+
+				</form>
+
+				<div id="updateWallRefresh">
+
+					<h1>HELLO</h1>
+				</div>
+			</div>
+
+			<div id="Browse" class="tabcontent">
+				<h3>Browse</h3>
+				<form class="browseUser" method="POST" action="#" id="browseUser">
+
+					<label for="searchUser"><span>Enter user email</span>
+						<input type="text" name="searchUserEmail" id="searchUserEmail" required>
+						<br>
+					</label>
+
+					<button id="searchUserPush" type="submit" value="searchUserButtom" name="searchUserButtom"> Search </button>
+
+
+					<label for="firstName"><span>First Name</span>
+						<input type="text" name="firstName" id="firstNameSearch" readonly>
+						<br>
+					</label>
+
+					<label for="familyName"><span>Family Name</span>
+						<input type="text" name="familyName" id="familyNameSearch" readonly>
+						<br>
+					</label>
+
+					<label for="gender"><span>Gender</span>
+						<input type="text" name="gender" id="genderSearch" readonly>
+						<br>
+					</label>
+
+					<label for="city"><span>City</span>
+						<input type="text" name="city" id="citySearch" readonly><br>
+					</label>
+
+					<label for="country"><span>Country</span>
+						<input type="text" name="country" id="countrySearch" readonly><br>
+					</label>
+
+					<label for="email"><span>Email</span>
+						<input type="email" name="email" id="emailSearch" readonly><br>
+					</label>
+
+				</form>
+
+				<form class="postMessage" method="POST" action="#" id="postMessage">
+
+					<label for="postMessage"><span>Post a message</span>
+						<input type="text" name="postMessageUser" id="postMessageUser">
+						<br>
+					</label>
+
+					<button id="postMessagePush" type="submit" value="postMessageButtom" name="postMessageButtom"> Post Message </button>
+
+
+
+
+
+				</form>
+
+				<div id="updateWall">
+
+					<h1>HELLO</h1>
+				</div>
+
+
+			</div>
+
+			<div id="Account" class="tabcontent">
+				<form class="changePass" method="POST" action="#" id="changePass">
+
+					<label for="oldPass"><span>Old password</span>
+						<input type="text" name="oldPass" id="oldPass" required>
+						<br>
+					</label>
+
+					<label for="newPass"><span>New password</span>
+						<input type="text" name="newPass" id="newPass" required>
+						<br>
+					</label>
+					<label for="repeatNewPass"><span>Repeat password</span>
+						<input type="text" name="repeatNewPass" id="repeatNewPass" required>
+						<br>
+					</label>
+					<button id="updatePassPush" type="submit" value="newPassButtom" name="newPassButtom"> Update password </button>
+
+				</form>
+
+				<form class="logOut" method="POST" action="#" id="logOut">
+
+					<button id="logOutPush" type="submit" value="logOutButtom" name="logOutButtom"> Log Out </button>
+
+				</form>
+
+			</div>
+		</script>	
+	</head>
+
+	<body id="body" >
+
+	</body>
+
+	</html>
