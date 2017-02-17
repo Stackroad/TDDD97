@@ -40,6 +40,7 @@ def get_user(email):
     except:
         return False
 
+
 def get_user_email(token):
     conn = connect_db()
     cur = conn.cursor()
@@ -50,6 +51,7 @@ def get_user_email(token):
         return result[0]
     except:
         return False
+
 
 def get_user_data_by_token(token):
     email_input = get_user_email(token)
@@ -63,7 +65,19 @@ def get_user_data_by_token(token):
         return result
     except:
         return False
-#[result[1], result[2], result[3], result[4], result[5], result[6], result[7]]
+
+
+def get_user_data_by_email(email):
+    conn = connect_db()
+    cur = conn.cursor()
+    email_input = (email,)
+    try:
+        cur.execute('''SELECT * FROM users WHERE email=?''', email_input)
+        result = cur.fetchone()
+        return result
+    except:
+        return False
+
 
 def sign_in_user(token, email):
     conn = connect_db()

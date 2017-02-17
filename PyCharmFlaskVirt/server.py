@@ -36,7 +36,7 @@ def sign_in():
             print(token)
             added_user = database_helper.sign_in_user(token, email)
             if added_user == True:
-                return 'User succesfully signed in', 200
+                return 'User successfully signed in', 200
             else:
                 return 'Could nog sign in', 501
         else:
@@ -106,10 +106,28 @@ def get_user_data_by_token():
         if result == False:
             return 'User data could not be accessed', 501
         else:
-            return  'email: {}, firstname: {},familyname: {}, gender: {}, city: {}, country: {}'.format(result[0], result[2], result[3], result[4], result[5], result[6])
+            return  json.dumps({'Success': True, 'Message': 'User data is returned', 'email': result[0],
+                                   'firstname': result[2], 'familyname': result[3], 'gender': result[4],
+                                   'city': result[5], 'country': result[6]})
 
 
-# ['email':result[0], 'firstname':result[1], 'familyname':result[2], 'gender':result[3], 'city':result[4], 'country':result[5]]
+@app.route('/get_user_data_by_email', methods=['POST'])
+def get_user_data_by_email():
+    if request.method == 'POST':
+        request.get_json()
+        email = request.get_json().get('email')
+        token = request.get_json().get('token')
+        if token != None:
+            result = database_helper.get_user_data_by_email(email)
+            if result == False:
+                return 'User email could not be found in table', 501
+            else:
+                return json.dumps({'Success': True, 'Message': 'User data is returned', 'email': result[0],
+                                   'firstname': result[2], 'familyname': result[3], 'gender': result[4],
+                                   'city': result[5], 'country': result[6]})
+        else:
+            return 'You are not signed in', 501
+
 
 if __name__ == '__main__':
     app.run()
