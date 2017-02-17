@@ -2,7 +2,7 @@ __author__ = 'Per och Matte'
 import sqlite3
 from flask import g
 
-DATABASE = 'C:\Users\Mattias\Desktop\PyCharmFlaskVirt\database.db'
+DATABASE = 'C:\Users\Per\PyCharmFlaskVirt\database.db'
 
 
 def connect_db():
@@ -65,7 +65,18 @@ def get_user_data_by_token(token):
         return result
     except:
         return False
-#[result[1], result[2], result[3], result[4], result[5], result[6], result[7]]
+
+
+def get_user_data_by_email(email):
+    conn = connect_db()
+    cur = conn.cursor()
+    email_input = (email,)
+    try:
+        cur.execute('''SELECT * FROM users WHERE email=?''', email_input)
+        result = cur.fetchone()
+        return result
+    except:
+        return False
 
 
 def sign_in_user(token, email):
@@ -78,7 +89,6 @@ def sign_in_user(token, email):
     except:
         return False
 
-
 def new_password(new_password, email):
     conn = connect_db()
     user_data = (new_password, email)
@@ -88,7 +98,6 @@ def new_password(new_password, email):
         return True
     except:
         return False
-
 
 def close():
     get_db().close()
@@ -104,43 +113,3 @@ def sign_out(token):
     except:
         return False
         # Lyckas alltid att ta bort fran logged in users, rakna rader istallet?
-
-def get_user_message_by_token(toUser):
-    conn = connect_db()
-    cur = conn.cursor()
-    data = (toUser,)
-    try:
-        cur.execute('''SELECT message FROM messages WHERE toUser=?''',data)
-        result = cur.fetchall()
-        messages = []
-        for m in result:
-            messages.append(m[0])
-        return messages
-    except:
-        return False
-
-
-def post_message(fromUser, message, toUser):
-    conn = connect_db()
-    data = (fromUser, message, toUser)
-    try:
-        conn.execute('''INSERT INTO  messages  VALUES (?,?,?)''', data)
-        conn.commit()
-        return True
-    except:
-        return False
-
-
-def get_user_messages_by_email(toUser):
-    conn = connect_db()
-    cur = conn.cursor()
-    data = (toUser,)
-    try:
-        cur.execute('''SELECT message FROM messages WHERE toUser=?''', data)
-        result = cur.fetchall()
-        messages = []
-        for m in result:
-            messages.append(m[0])
-        return messages
-    except:
-        return False
