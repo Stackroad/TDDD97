@@ -36,7 +36,7 @@ def sign_in():
             print(token)
             added_user = database_helper.sign_in_user(token, email)
             if added_user == True:
-                return 'User successfully signed in', 200
+                return 'User succesfully signed in', 200
             else:
                 return 'Could nog sign in', 501
         else:
@@ -46,6 +46,7 @@ def sign_in():
 # skapa tpoken och lagra i logged in users table
 # .hex as a 32-character hexadecimal string
 # uuid4() random uuid
+
 
 @app.route('/sign_up', methods=['POST'])
 def sign_up():
@@ -78,6 +79,7 @@ def sign_out():
         else:
             return 'could not sign out', 501
 
+
 @app.route('/change_password', methods=['POST'])
 def change_password():
     if request.method == 'POST':
@@ -96,6 +98,7 @@ def change_password():
         else:
             return 'Old password does not match', 501
 
+
 @app.route('/get_user_data_by_token', methods=['POST'])
 def get_user_data_by_token():
     if request.method == 'POST':
@@ -106,28 +109,53 @@ def get_user_data_by_token():
         if result == False:
             return 'User data could not be accessed', 501
         else:
-            return  json.dumps({'Success': True, 'Message': 'User data is returned', 'email': result[0],
-                                   'firstname': result[2], 'familyname': result[3], 'gender': result[4],
-                                   'city': result[5], 'country': result[6]})
+            return  'email: {}, firstname: {},familyname: {}, gender: {}, city: {}, country: {}'.format(result[0], result[2], result[3], result[4], result[5], result[6])
 
 
-@app.route('/get_user_data_by_email', methods=['POST'])
-def get_user_data_by_email():
+@app.route('/get_user_messages_by_token', methods=['POST'])
+def get_user_messages_by_token():
     if request.method == 'POST':
         request.get_json()
-        email = request.get_json().get('email')
         token = request.get_json().get('token')
-        if token != None:
-            result = database_helper.get_user_data_by_email(email)
-            if result == False:
-                return 'User email could not be found in table', 501
-            else:
-                return json.dumps({'Success': True, 'Message': 'User data is returned', 'email': result[0],
-                                   'firstname': result[2], 'familyname': result[3], 'gender': result[4],
-                                   'city': result[5], 'country': result[6]})
+        toUser = database_helper.get_user_email(token)
+        result = database_helper.get_user_message_by_token(toUser)
+        if result != False:
+            return json.dumps({'Success': True, 'Message': 'This is the retrieved messages', 'Messages': result})
         else:
-            return 'You are not signed in', 501
+            return 'could not change password', 501
 
+
+@app.route('/post_message', methods=['POST'])
+def post_message():
+    if request.method == 'POST':
+        request.get_json()
+        token = request.get_json().get('token')
+        message = request.get_json().get('message')
+        toUser = request.get_json().get('email')
+        fromUser = database_helper.get_user_email(token)
+        result = database_helper.post_message(fromUser, message, toUser)
+        if result == True:
+            return 'Message posted', 200
+        else:
+            return 'could not post message', 501
+
+@app.route('/get_user_messages_by_email', methods=['POST'])
+def get_user_messages_by_email():
+    if request.method == 'POST':
+        request.get_json()
+        token = request.get_json().get('token')
+        toUser = request.get_json().get('email')
+        signedIn = database_helper.get_user_email(token)
+        if signedIn != False:
+            result = database_helper.get_user_messages_by_email(toUser)
+            print result
+            return json.dumps({'Success': True, 'Message': 'This is the retrieved messages', 'Messages': result})
+        else:
+            return 'fial', 501
+
+
+
+# ['email':result[0], 'firstname':result[1], 'familyname':result[2], 'gender':result[3], 'city':result[4], 'country':result[5]]
 
 if __name__ == '__main__':
     app.run()
