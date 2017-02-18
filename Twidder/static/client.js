@@ -12,14 +12,18 @@ function validateSignInForm(event) {
 	xmlhttp.onreadystatechange = function() {
 		console.log('HejsanSIGNUP');
 		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
-
-				document.getElementById("alertSignUp").innerHTML = "<b>Successfully signed in!</b>";
+			data = JSON.parse(xmlhttp.responseText);
+			console.log(data.message);
+            if (data.success) {
+            	console.log(data.success);
+                document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
 				displayView("userView");
 				attachHandlersUser();
                 }
+                }
 		else {
-				document.getElementById("alertSignUp").innerHTML = "<b>Feeeel</b>";
-				console.log('Da ar vi har');
+			data = JSON.parse(xmlhttp.responseText);
+			document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
                 }
 
         }
@@ -84,9 +88,7 @@ function logOutForm(event) {
 
 function validateSignUpForm(event) {
 	xmlhttp.onreadystatechange = function() {
-		console.log('HejsanSIGNUP');
 		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
-
 				document.getElementById("alertSignUp").innerHTML = "<b>Successfully signed up!</b>";
 				displayView("welcomeView");
 				attachHandlersWelcome();
@@ -148,21 +150,36 @@ function openTab(evt, tabName) {
 	evt.currentTarget.className += " active";
 
 	if(tabName === 'Home'){
+		xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+			data = JSON.parse(xmlhttp.responseText);
+           if (data.success) {
+            	console.log(data.success);
+				document.getElementById("firstName").value = data.firstname;
+				document.getElementById("familyName").value = data.familyname;
+				document.getElementById("gender").value = data.gender;
+				document.getElementById("city").value = data.city;
+				document.getElementById("country").value = data.country;
+				document.getElementById("email").value = data.email;
+				attachHandlersWelcome();
+           }
+                }
+		else {
+				console.log('Da ar vi har');
+		}
+        }
 		var token = localStorage.getItem("token");
-		userInfo = serverstub.getUserDataByToken(token);
-		
-		document.getElementById("firstName").value = userInfo.data.firstname;
-		document.getElementById("familyName").value = userInfo.data.familyname;
-		document.getElementById("gender").value = userInfo.data.gender;
-		document.getElementById("city").value = userInfo.data.city;
-		document.getElementById("country").value = userInfo.data.country;
-		document.getElementById("email").value = userInfo.data.email;
 
 		var updateHomeForm = document.getElementById("homeForm");
 
 		updateHomeForm.addEventListener('submit', validateHomeForm);
 	}
+	var params = "token="+token;
+	xmlhttp.open("POST", "/get_user_data_by_token", true);
+	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xmlhttp.send(params);
 }
+
 
 function validateNewPassForm(event) {
 	event.preventDefault();
@@ -252,10 +269,11 @@ function updateWall(token, email) {
 }
 
 function refreshWall(token, email) {
+
+
+
 	event.preventDefault();
-
 	document.getElementById("updateWallRefresh").innerHTML = "<b>The Wall <br></b>";
-
 	theWall = serverstub.getUserMessagesByEmail(token, email);
 
 
