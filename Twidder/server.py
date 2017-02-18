@@ -31,6 +31,7 @@ def sign_in():
         email = request.form['email']
         password = request.form['password']
         result = database_helper.get_user(email)
+        print(result)
         if result == password:
             token = uuid.uuid4().hex
             added_user = database_helper.sign_in_user(token, email)
@@ -77,6 +78,7 @@ def sign_out():
         request.get_json()
         token = request.get_json().get('token')
         result = database_helper.sign_out(token)
+        print result
         if result == True:
             return 'signed out', 200
         else:
@@ -118,7 +120,10 @@ def get_user_data_by_token():
         if result == False:
             return 'User data could not be accessed', 501
         else:
-            return  json.dumps({'success': True, 'message': 'User data is returned', 'email': result[0], 'firstname': result[2], 'familyname': result[3], 'gender': result[4], 'city': result[5], 'country': result[6]})
+            return  json.dumps({'success': True, 'message': 'User data is returned',
+                                'email': result[0], 'firstname': result[2],
+                                'familyname': result[3], 'gender': result[4], 'city': result[5], 'country': result[6]})
+
 
 
 
@@ -126,9 +131,8 @@ def get_user_data_by_token():
 @app.route('/get_user_data_by_email', methods=['POST'])
 def get_user_data_by_email():
     if request.method == 'POST':
-        request.get_json()
-        email = request.get_json().get('email')
-        token = request.get_json().get('token')
+        email = request.form['email']
+        token = request.form['token']
         if token != None:
             result = database_helper.get_user_data_by_email(email)
             if result == False:
@@ -157,26 +161,24 @@ def get_user_messages_by_token():
 @app.route('/post_message', methods=['POST'])
 def post_message():
     if request.method == 'POST':
-        request.get_json()
-        token = request.get_json().get('token')
-        message = request.get_json().get('message')
-        toUser = request.get_json().get('email')
+        token = request.form['token']
+        message = request.form['message']
+        toUser = request.form['email']
         fromUser = database_helper.get_user_email(token)
         result = database_helper.post_message(fromUser, message, toUser)
         if result == True:
-            return 'Message posted', 200
+            return json.dumps({'success': True, 'Message': 'Message posted', 'token':token,'toUser':toUser,})
         else:
-            return 'could not post message', 501
+            return json.dumps({'success': False, 'Message': 'failed'})
 
 @app.route('/get_user_messages_by_email', methods=['POST'])
 def get_user_messages_by_email():
     if request.method == 'POST':
-        request.get_json()
-        token = request.get_json().get('token')
-        toUser = request.get_json().get('email')
+        token = request.form['token']
+        toUser = request.form['email']
         signedIn = database_helper.get_user_email(token)
         if signedIn != False:
             result = database_helper.get_user_messages_by_email(toUser)
-            return json.dumps({'Success': True, 'Message': 'This is the retrieved messages', 'Messages': result})
+            return json.dumps({'success': True, 'Message': 'This is the retrieved messages', 'Messages': result})
         else:
-            return 'fial', 501
+            return json.dumps({'success': False, 'Message': 'failed'})
