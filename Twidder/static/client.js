@@ -2,84 +2,49 @@ var xmlhttp = new XMLHttpRequest();
 var data;
 
 displayView = function(nameOfPage){
-
 	var openPage =	document.getElementById(nameOfPage).innerHTML;
-
 	document.getElementById('body').innerHTML = openPage;
 };
 
 function validateSignInForm(event) {
 	xmlhttp.onreadystatechange = function() {
-		console.log('HejsanSIGNUP');
-		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
-			data = JSON.parse(xmlhttp.responseText);
-			console.log(data.message);
+        console.log('HejsanSIGNUP');
+        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+            data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
-            	console.log(data.success);
-                document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
-				displayView("userView");
-				attachHandlersUser();
-                }
-                }
-		else {
-			data = JSON.parse(xmlhttp.responseText);
-			document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
-                }
-
+                document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
+                displayView("userView");
+                //attachHandlersUser();
+            }
+            else {
+                document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
+            }
         }
-
-	console.log('Hejsan');
+    }
 	event.preventDefault();
 
 	var emailLogIn = document.getElementById('emailLogIn').value;
-
 	var passwordLogIn = document.getElementById('passwordLogIn').value;
-	var limitLength = passwordLogIn.length;
-
-	// if (limitLength < 5) {
-	// 	document.getElementById("alertSignIn").innerHTML =
-	// 	"<b>Password must contain atleast 6 characters </b>";
-	// }
-	// else {
-	// 	var loginObject = serverstub.signIn(emailLogIn, passwordLogIn);
-	// 	tokenUser = loginObject.data;
-	// 	tokenUserSuccess = loginObject.success;
-    //
-	// 	console.log(tokenUser);
-	// 	localStorage.setItem("token", tokenUser);
-    //
-	// 	if (tokenUserSuccess === false) {
-	// 		document.getElementById("alertSignIn").innerHTML =
-	// 		"<b>Could not sign in</b>";
-	// 	}
-	// 	else {
-	// 		displayView("userView");
-	// 		attachHandlersUser();
-	// 	}
-
-
-
 	var params = "email="+emailLogIn+"&password="+passwordLogIn;
+
 	xmlhttp.open("POST", "/sign_in", true);
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xmlhttp.send(params);
-
-	event.preventDefault();
 }
 
 function logOutForm(event) {
 	event.preventDefault();
-	
+
 	var token = localStorage.getItem("token");
 	var logOutCall = serverstub.signOut(token);
 	var logOutSuccess = logOutCall.success;
 
 	if (tokenUserSuccess === false) {
-		
+
 		console.log('Nu loggas du inte ut');
 	}
 	else {
-		
+
 		displayView("welcomeView");
 		attachHandlersWelcome();
 		console.log('Nu loggas du ut');
@@ -88,17 +53,19 @@ function logOutForm(event) {
 
 function validateSignUpForm(event) {
 	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
-				document.getElementById("alertSignUp").innerHTML = "<b>Successfully signed up!</b>";
-				displayView("welcomeView");
-				attachHandlersWelcome();
-                }
-		else {
-				document.getElementById("alertSignUp").innerHTML = "<b>Feeeel</b>";
-				console.log('Da ar vi har');
-                }
-
+        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+            data = JSON.parse(xmlhttp.responseText);
+            if (data.success) {
+                document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
+                //attachHandlersUser();
+            }
+            else {
+                document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
+            }
         }
+    }
+    event.preventDefault();
+
 	var password = document.getElementById('password').value;
 	var repeatPSW = document.getElementById('repeatPSW').value;
 	var firstname = document.getElementById('firstName').value;
@@ -107,33 +74,12 @@ function validateSignUpForm(event) {
 	var city = document.getElementById('city').value;
 	var country = document.getElementById('country').value;
 	var email = document.getElementById('email').value;
-	var objectSignUp = {"email":email, "password":password, "firstname":firstname, "familyname":familyname, "gender":gender, "city":city, "country":country};
 
 	var params = "email="+email+"&password="+repeatPSW+"&firstname="+firstname+"&familyname="+familyname+"&gender="+gender+"&city="+city+"&country="+country;
-	console.log(objectSignUp)
+
 	xmlhttp.open("POST", "/sign_up", true);
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xmlhttp.send(params);
-
-	event.preventDefault();
-
-
-
-	// if (limitLength < 5) {
-	// 	document.getElementById("alertSignUp").innerHTML =
-	// 	"<b>Password must contain atleast 5 characters</b>";
-    //
-	// }
-	// else if (repeatPSW !== password) {
-	// 	document.getElementById("alertSignUp").innerHTML =
-	// 	"<b>Passwords dont match</b>";
-	// }
-	// else {
-	// 	var signUpCall = serverstub.signUp(objectSignUp);
-	// 	console.log(objectSignUp);
-	// 	console.log(signUpCall);
-	console.log('Nu ar vi har');
-
 }
 
 function openTab(evt, tabName) {
@@ -232,7 +178,7 @@ function searchUserForm(event) {
 	document.getElementById("emailSearch").value = searchUserData.data.email;
 
 	updateWall(token, searchUserEmail);
-}	
+}
 
 function postMessageForm(event) {
 	event.preventDefault();
@@ -300,7 +246,7 @@ function validateHomeForm(event) {
 
 	var emailHome = document.getElementById("email").value;
 	var token = localStorage.getItem("token");
-	
+
 	refreshWall(token, emailHome);
 }
 
