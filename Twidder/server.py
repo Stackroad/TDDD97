@@ -28,21 +28,19 @@ def root():
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
     if request.method == 'POST':
-        request.get_json()
-        email = request.get_json().get('email')
-        password = request.get_json().get('password')
+        email = request.form['email']
+        password = request.form['password']
         result = database_helper.get_user(email)
         print(result)
         if result == password:
             token = uuid.uuid4().hex
             added_user = database_helper.sign_in_user(token, email)
             if added_user == True:
-                return json.dumps({'Success': True, 'Message': 'Succesfully signed in, your token is:', 'Messages': token})
+                return json.dumps({'success': True, 'message': 'Succesfully signed in, your token is:', 'messages': token})
             else:
-                return 'Could nog sign in', 501
+                 return json.dumps({'success': False, 'message': 'Could not sign in', 'messages': 501})
         else:
-            return 'User not found', 501
-
+            return json.dumps({'False': True, 'message': 'Password does not match', 'messages': 501})
 
 # skapa tpoken och lagra i logged in users table
 # .hex as a 32-character hexadecimal string
@@ -52,14 +50,13 @@ def sign_in():
 @app.route('/sign_up', methods=['POST'])
 def sign_up():
     if request.method == 'POST':
-        request.get_json()
-        email = request.get_json().get('email')
-        password = request.get_json().get('password')
-        firstname = request.get_json().get('firstname')
-        familyname = request.get_json().get('familyname')
-        gender = request.get_json().get('gender')
-        city = request.get_json().get('city')
-        country = request.get_json().get('country')
+        email = request.form['email']
+        password = request.form['password']
+        firstname = request.form['firstname']
+        familyname = request.form['familyname']
+        gender = request.form['gender']
+        city = request.form['city']
+        country = request.form['country']
         result = database_helper.add_user(email, password, firstname, familyname, gender, city, country)
         if len(password) > 5:
             if validate_email(email)== True:
@@ -107,8 +104,7 @@ def change_password():
 @app.route('/get_user_data_by_token', methods=['POST'])
 def get_user_data_by_token():
     if request.method == 'POST':
-        request.get_json()
-        token = request.get_json().get('token')
+        token = request.form('token')
         result = database_helper.get_user_data_by_token(token)
         if result == False:
             return 'User data could not be accessed', 501
