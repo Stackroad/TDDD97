@@ -36,7 +36,8 @@ def sign_in():
             token = uuid.uuid4().hex
             added_user = database_helper.sign_in_user(token, email)
             if added_user == True:
-                return json.dumps({'success': True, 'message': 'Succesfully signed in, your token is:', 'messages': token})
+                return json.dumps({'success': True, 'message': 'Succesfully signed in, your token is:',
+                                   'messages': token})
             else:
                  return json.dumps({'success': False, 'message': 'Could not sign in', 'messages': 501})
         else:
@@ -61,12 +62,14 @@ def sign_up():
         if len(password) > 5:
             if validate_email(email)== True:
                 if result == True:
-                    return 'signed up', 200
+                    return json.dumps({'success': True, 'message': 'Succesfully signed up', 'messages': 200})
                 else:
-                    return 'could not sign up', 501
-            else: return 'Not a valid email', 501
+                    return json.dumps({'success': False, 'message': 'Could not sign up check passwords or that your '
+                                                                    ' not already a member', 'messages': 501})
+            else: return json.dumps({'success': False, 'message': 'Not a valid email', 'messages': 501})
         else:
-            return 'Password needs to be longer then 5 characters', 501
+            return json.dumps({'success': False, 'message': 'Password needs to be longer then 5 characters',
+                               'messages': 501})
 
 
 @app.route('/sign_out', methods=['POST'])
@@ -174,8 +177,3 @@ def get_user_messages_by_email():
             return json.dumps({'Success': True, 'Message': 'This is the retrieved messages', 'Messages': result})
         else:
             return 'fial', 501
-
-
-
-# ['email':result[0], 'firstname':result[1], 'familyname':result[2], 'gender':result[3], 'city':result[4], 'country':result[5]]
-
