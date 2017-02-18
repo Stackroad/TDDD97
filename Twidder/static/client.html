@@ -1,5 +1,8 @@
+<!DOCTYPE html>
 <html>
 <head>
+	<title>TWIDDER</title>
+	<meta charset="utf-8">
 	<link href="client.css" type="text/css" rel="stylesheet">
 	<script src="client.js" type="text/javascript"></script>
 	<script src="serverstub.js" type="text/javascript"></script>
@@ -20,6 +23,10 @@
 						<br>
 					</label>
 					<button id="logInPush" type="submit" value="loginButtom" name="loginButtom"> login </button>
+				</div>
+				<div id="alertSignIn" class="alertMess">
+
+
 				</div>
 			</form>
 
@@ -68,11 +75,15 @@
 				</label>
 
 				<button id="signUpPush" type="submit" value="signUpButtom" name="signUpButtom"> SignUp </button>
+				<div id="alertSignUp" class="alertMess">
+
+
+				</div>
 
 			</form>
 
 		</div>
-	</script>	
+	</script>
 	<script type="text/view" id="userView">
 
 		<h1>HEJSAN USER</h1>
@@ -189,22 +200,24 @@
 				</div>
 
 
+
+
 			</div>
 
 			<div id="Account" class="tabcontent">
 				<form class="changePass" method="POST" action="#" id="changePass">
 
 					<label for="oldPass"><span>Old password</span>
-						<input type="text" name="oldPass" id="oldPass" required>
+						<input type="password" name="oldPass" id="oldPass" required>
 						<br>
 					</label>
 
 					<label for="newPass"><span>New password</span>
-						<input type="text" name="newPass" id="newPass" required>
+						<input type="password" name="newPass" id="newPass" required>
 						<br>
 					</label>
 					<label for="repeatNewPass"><span>Repeat password</span>
-						<input type="text" name="repeatNewPass" id="repeatNewPass" required>
+						<input type="password" name="repeatNewPass" id="repeatNewPass" required>
 						<br>
 					</label>
 					<button id="updatePassPush" type="submit" value="newPassButtom" name="newPassButtom"> Update password </button>
@@ -216,13 +229,16 @@
 					<button id="logOutPush" type="submit" value="logOutButtom" name="logOutButtom"> Log Out </button>
 
 				</form>
+				<div id="alertNewPass" class="alertMess">
+
+
+				</div>
 
 			</div>
-		</script>	
+		</script>
 	</head>
 
 	<body id="body" >
 
 	</body>
-
 	</html>
