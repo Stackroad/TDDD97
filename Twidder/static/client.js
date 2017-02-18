@@ -2,49 +2,86 @@ var xmlhttp = new XMLHttpRequest();
 var data;
 
 displayView = function(nameOfPage){
+
 	var openPage =	document.getElementById(nameOfPage).innerHTML;
+
 	document.getElementById('body').innerHTML = openPage;
 };
 
 function validateSignInForm(event) {
 	xmlhttp.onreadystatechange = function() {
-        console.log('HejsanSIGNUP');
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
-            data = JSON.parse(xmlhttp.responseText);
+		console.log('HejsanSIGNUP');
+		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+			data = JSON.parse(xmlhttp.responseText);
+			console.log(data.message);
             if (data.success) {
-                document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
-                displayView("userView");
-                //attachHandlersUser();
-            }
-            else {
-                document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
-            }
+            	console.log(data.success);
+            	console.log(data.token);
+            	localStorage.token = data.token;
+                //document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
+				displayView("userView");
+				attachHandlersUser();
+                }
+                }
+		else {
+			data = JSON.parse(xmlhttp.responseText);
+			document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
+                }
+
         }
-    }
+
+	console.log('Hejsan');
 	event.preventDefault();
 
 	var emailLogIn = document.getElementById('emailLogIn').value;
-	var passwordLogIn = document.getElementById('passwordLogIn').value;
-	var params = "email="+emailLogIn+"&password="+passwordLogIn;
 
+	var passwordLogIn = document.getElementById('passwordLogIn').value;
+	var limitLength = passwordLogIn.length;
+
+	// if (limitLength < 5) {
+	// 	document.getElementById("alertSignIn").innerHTML =
+	// 	"<b>Password must contain atleast 6 characters </b>";
+	// }
+	// else {
+	// 	var loginObject = serverstub.signIn(emailLogIn, passwordLogIn);
+	// 	tokenUser = loginObject.data;
+	// 	tokenUserSuccess = loginObject.success;
+    //
+	// 	console.log(tokenUser);
+	// 	localStorage.setItem("token", tokenUser);
+    //
+	// 	if (tokenUserSuccess === false) {
+	// 		document.getElementById("alertSignIn").innerHTML =
+	// 		"<b>Could not sign in</b>";
+	// 	}
+	// 	else {
+	// 		displayView("userView");
+	// 		attachHandlersUser();
+	// 	}
+
+
+
+	var params = "email="+emailLogIn+"&password="+passwordLogIn;
 	xmlhttp.open("POST", "/sign_in", true);
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xmlhttp.send(params);
+
+	event.preventDefault();
 }
 
 function logOutForm(event) {
 	event.preventDefault();
-
+	
 	var token = localStorage.getItem("token");
 	var logOutCall = serverstub.signOut(token);
 	var logOutSuccess = logOutCall.success;
 
 	if (tokenUserSuccess === false) {
-
+		
 		console.log('Nu loggas du inte ut');
 	}
 	else {
-
+		
 		displayView("welcomeView");
 		attachHandlersWelcome();
 		console.log('Nu loggas du ut');
@@ -53,19 +90,14 @@ function logOutForm(event) {
 
 function validateSignUpForm(event) {
 	xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
-            data = JSON.parse(xmlhttp.responseText);
-            if (data.success) {
-                document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
-                //attachHandlersUser();
-            }
-            else {
-                document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
-            }
-        }
-    }
-    event.preventDefault();
+		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+				document.getElementById("alertSignUp").innerHTML = "<b>Successfully signed up!</b>";
+                }
+		else {
+				document.getElementById("alertSignUp").innerHTML = "<b>Feeeel</b>";
+                }
 
+        }
 	var password = document.getElementById('password').value;
 	var repeatPSW = document.getElementById('repeatPSW').value;
 	var firstname = document.getElementById('firstName').value;
@@ -74,12 +106,32 @@ function validateSignUpForm(event) {
 	var city = document.getElementById('city').value;
 	var country = document.getElementById('country').value;
 	var email = document.getElementById('email').value;
+	var objectSignUp = {"email":email, "password":password, "firstname":firstname, "familyname":familyname, "gender":gender, "city":city, "country":country};
 
 	var params = "email="+email+"&password="+repeatPSW+"&firstname="+firstname+"&familyname="+familyname+"&gender="+gender+"&city="+city+"&country="+country;
-
 	xmlhttp.open("POST", "/sign_up", true);
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xmlhttp.send(params);
+
+	event.preventDefault();
+
+
+
+	// if (limitLength < 5) {
+	// 	document.getElementById("alertSignUp").innerHTML =
+	// 	"<b>Password must contain atleast 5 characters</b>";
+    //
+	// }
+	// else if (repeatPSW !== password) {
+	// 	document.getElementById("alertSignUp").innerHTML =
+	// 	"<b>Passwords dont match</b>";
+	// }
+	// else {
+	// 	var signUpCall = serverstub.signUp(objectSignUp);
+	// 	console.log(objectSignUp);
+	// 	console.log(signUpCall);
+	console.log('Nu ar vi har');
+
 }
 
 function openTab(evt, tabName) {
@@ -100,7 +152,6 @@ function openTab(evt, tabName) {
 		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
 			data = JSON.parse(xmlhttp.responseText);
            if (data.success) {
-            	console.log(data.success);
 				document.getElementById("firstName").value = data.firstname;
 				document.getElementById("familyName").value = data.familyname;
 				document.getElementById("gender").value = data.gender;
@@ -114,29 +165,51 @@ function openTab(evt, tabName) {
 				console.log('Da ar vi har');
 		}
         }
-		var token = localStorage.getItem("token");
-
 		var updateHomeForm = document.getElementById("homeForm");
-
 		updateHomeForm.addEventListener('submit', validateHomeForm);
+		var token = localStorage.getItem("token");
+		console.log(token);
+		var params = "token="+token;
+		xmlhttp.open("POST", "/get_user_data_by_token", true);
+		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xmlhttp.send(params);
 	}
-	var params = "token="+token;
-	xmlhttp.open("POST", "/get_user_data_by_token", true);
-	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xmlhttp.send(params);
+
 }
 
 
 function validateNewPassForm(event) {
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+            data = JSON.parse(xmlhttp.responseText);
+            if (data.success) {
+                document.getElementById("alertNewPass").innerHTML = "<b>" + data.message + "</b>";
+            }
+            else {
+                document.getElementById("alertNewPass").innerHTML = "<b>" + data.message + "</b>";
+            }
+        }
+		else {
+        	document.getElementById("alertNewPass").innerHTML = "<b>" + data.message + "</b>";
+		}
+    }
+
 	event.preventDefault();
 
 	var newPass = document.getElementById('newPass').value;
 	var repeatNewPass = document.getElementById('repeatNewPass').value;
 	var oldPass = document.getElementById('oldPass').value;
-	var limitLength = newPass.length;
-	// var passwordLogIn = document.getElementById('passwordLogIn').value;
+	var token = localStorage.getItem('token');
+	var params = "token="+token+"&oldPass="+oldPass+"&newPass="+newPass+"&repeatNewPass="+repeatNewPass;
 
-	if (limitLength < 5) {
+		console.log(params)
+		xmlhttp.open("POST", "/change_password", true);
+		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xmlhttp.send(params);
+
+
+
+/*	if (limitLength < 5) {
 		document.getElementById("alertNewPass").innerHTML =
 		"<b>Password must contain atleast 6 characters </b>";
 	}
@@ -158,7 +231,7 @@ function validateNewPassForm(event) {
 			"<b>Password changed</b>";
 		}
 
-	}
+	}*/
 }
 
 
@@ -178,7 +251,7 @@ function searchUserForm(event) {
 	document.getElementById("emailSearch").value = searchUserData.data.email;
 
 	updateWall(token, searchUserEmail);
-}
+}	
 
 function postMessageForm(event) {
 	event.preventDefault();
@@ -246,7 +319,7 @@ function validateHomeForm(event) {
 
 	var emailHome = document.getElementById("email").value;
 	var token = localStorage.getItem("token");
-
+	
 	refreshWall(token, emailHome);
 }
 
