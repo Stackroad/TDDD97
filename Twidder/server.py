@@ -31,13 +31,12 @@ def sign_in():
         email = request.form['email']
         password = request.form['password']
         result = database_helper.get_user(email)
-        print(result)
         if result == password:
             token = uuid.uuid4().hex
             added_user = database_helper.sign_in_user(token, email)
             if added_user == True:
                 return json.dumps({'success': True, 'message': 'Succesfully signed in, your token is:',
-                                   'messages': token})
+                                   'token': token})
             else:
                  return json.dumps({'success': False, 'message': 'Could not sign in', 'messages': 501})
         else:
@@ -78,7 +77,6 @@ def sign_out():
         request.get_json()
         token = request.get_json().get('token')
         result = database_helper.sign_out(token)
-        print result
         if result == True:
             return 'signed out', 200
         else:
@@ -88,33 +86,39 @@ def sign_out():
 @app.route('/change_password', methods=['POST'])
 def change_password():
     if request.method == 'POST':
-        request.get_json()
-        token = request.get_json().get('token')
-        old_password = request.get_json().get('old_password')
-        new_password = request.get_json().get('new_password')
+        token = request.form['token']
+        old_password = request.form['oldPass']
+        new_password = request.form['newPass']
+        repeat_newpass = request.form['repeatNewPass']
         email = database_helper.get_user_email(token)
         verify_pass = database_helper.get_user(email)
         if verify_pass == old_password:
-            result = database_helper.new_password(new_password,email)
-            if result == True:
-                return 'Changed password', 200
+            if len(new_password) > 5:
+                result = database_helper.new_password(new_password,email);
+                if repeat_newpass == new_password:
+                    if result == True:
+                        return json.dumps({'success': True, 'message': 'Changed password'})
+                    else:
+                        return json.dumps({'success': False, 'message': 'could not change password'})
+                else:
+                    return json.dumps({'success': False, 'message': 'New passwords does not match',
+                                       'messages': 501})
             else:
-                return 'could not change password', 501
+                return json.dumps({'success': False, 'message': 'Password needs to be longer then 5 characters',
+                               'messages': 501})
         else:
-            return 'Old password does not match', 501
+            return json.dumps({'success': False, 'message': 'Old password does not match'})
 
 
 @app.route('/get_user_data_by_token', methods=['POST'])
 def get_user_data_by_token():
     if request.method == 'POST':
-        token = request.form('token')
+        token = request.form['token']
         result = database_helper.get_user_data_by_token(token)
         if result == False:
             return 'User data could not be accessed', 501
         else:
-            return  json.dumps({'Success': True, 'Message': 'User data is returned', 'email': result[0],
-                                   'firstname': result[2], 'familyname': result[3], 'gender': result[4],
-                                   'city': result[5], 'country': result[6]})
+            return  json.dumps({'success': True, 'message': 'User data is returned', 'email': result[0], 'firstname': result[2], 'familyname': result[3], 'gender': result[4], 'city': result[5], 'country': result[6]})
 
 
 
@@ -130,7 +134,7 @@ def get_user_data_by_email():
             if result == False:
                 return 'User email could not be found in table', 501
             else:
-                return json.dumps({'Success': True, 'Message': 'User data is returned', 'email': result[0],
+                return json.dumps({'success': True, 'message': 'User data is returned', 'email': result[0],
                                    'firstname': result[2], 'familyname': result[3], 'gender': result[4],
                                    'city': result[5], 'country': result[6]})
         else:
@@ -173,7 +177,6 @@ def get_user_messages_by_email():
         signedIn = database_helper.get_user_email(token)
         if signedIn != False:
             result = database_helper.get_user_messages_by_email(toUser)
-            print result
             return json.dumps({'Success': True, 'Message': 'This is the retrieved messages', 'Messages': result})
         else:
             return 'fial', 501
