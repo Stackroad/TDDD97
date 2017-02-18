@@ -1,0 +1,177 @@
+h2 {
+	color: black;
+	text-align: center;
+}
+
+#body {
+	background-color: lightblue;
+}
+
+#logo {
+	width: 340px;
+	height: 400px;
+	margin-right: 10px;
+	float: left;
+}
+
+form {
+	margin-bottom: 0px;
+}
+
+.login {
+	height: 100px;
+	width: 250px;
+	overflow: hidden;
+	float: right;
+	background-color: white;
+	margin-bottom: 10px;
+}
+
+.innerField {
+	padding-top: 20px;
+}
+
+.signUp {
+	height: 290px;
+	width: 250px;
+	overflow: hidden;
+	float: right;
+	background-color: white;
+}
+
+.rollBar {
+	width: 161px;
+	float: right;
+	background-color: lightgrey;
+}
+input[type=text]{
+	float: right;
+	display: inline-block;
+	font-size: 70%;
+}
+
+input[type=password]{
+	float: right;
+	display: inline-block;
+	font-size: 70%;	
+}
+
+input[type=email]{
+	float: right;
+	display: inline-block;
+	font-size: 70%;	
+}
+
+#logInPush {
+	clear: right;
+	float: right;	
+}
+
+#signUpPush {
+	clear: right;
+	float: right;	
+}
+.alertMess {
+	font-size: 50%;
+	color: red;
+}
+
+.container  {
+	margin: auto;
+	padding-top: 100px;
+	width: 600px;
+	height: 400px;
+	vertical-align: middle;
+}
+
+label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+label > span {
+	display: inline-block;
+}
+
+body {font-family: "Lato", sans-serif;}
+
+ul.tab {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 1px solid #ccc;
+	background-color: #f1f1f1;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+	display: inline-block;
+	color: black;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	transition: 0.3s;
+	font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {
+	background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {
+	background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+	display: none;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-top: none;
+}
+
+.changePass {
+	width: 300px;
+}
+
+
+.homeForm {
+	float: left;
+}
+
+.browseUser {
+	width: 300px;
+}
+
+.postMessage {
+
+	width: 300px;
+}
+
+#wallSearch {
+	width: 200px;
+	height: 200px;
+}
+#updateWallRefresh{
+	clear: left;
+	float: left;
+}
+
+#wallstyle{
+	width: 200px;
+	height: 150px;
+	background-color: white; 
+	margin-bottom: 10px;
+}
+
+#wallstyleInner{
+	background-color: lightgreen;
+	width: 200px;
+}
+
