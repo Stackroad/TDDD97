@@ -1,5 +1,6 @@
 from flask import Flask, request, send_from_directory, render_template
 from validate_email import validate_email
+
 import database_helper
 import uuid
 import json
@@ -24,6 +25,15 @@ def before_request():
 def root():
     return app.send_static_file('client.html')
 
+@app.route('/socket')
+def socket():
+    if request.environ.get('wsgi.websocket'):
+        ws = request.environ['wsgi.websocket']
+        while True:
+            message = ws.receive()
+            ws.send(message)
+            return
+
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
@@ -39,7 +49,7 @@ def sign_in():
                 return json.dumps({'success': True, 'message': 'Succesfully signed in, your token is:',
                                    'token': token})
             else:
-                 return json.dumps({'success': False, 'message': 'Could not sign in', 'messages': 501})
+                return json.dumps({'success': False, 'message': 'Could not sign in', 'messages': 501})
         else:
             return json.dumps({'False': True, 'message': 'Password does not match', 'messages': 501})
 
@@ -75,14 +85,13 @@ def sign_up():
 @app.route('/sign_out', methods=['POST'])
 def sign_out():
     if request.method == 'POST':
-        request.get_json()
-        token = request.get_json().get('token')
+        token = request.form['token']
         result = database_helper.sign_out(token)
         print result
         if result == True:
-            return 'signed out', 200
+            return json.dumps({'success': True, 'Message': ' signed out', 'token':token})
         else:
-            return 'could not sign out', 501
+            return json.dumps({'success': False, 'Message': 'failed'})
 
 
 @app.route('/change_password', methods=['POST'])

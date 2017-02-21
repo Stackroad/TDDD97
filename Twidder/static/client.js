@@ -1,5 +1,24 @@
 var xmlhttp = new XMLHttpRequest();
 var data;
+var socket = new WebSocket('ws://127.0.0.1:5000/socket');
+
+
+socket.onerror = function(error) {
+  console.log('WebSocket Error: ' + error);
+};
+
+socket.onopen = function(event) {
+	//insert = event.currentTarget.URL;
+	console.log('Connected')
+	socket.send(localStorage.getItem('token'))
+	//console.log(yo + ' din token')
+};
+
+socket.onmessage = function(event) {
+	var message = event.data;
+	console.log(message)
+};
+
 
 displayView = function(nameOfPage){
 	var openPage =	document.getElementById(nameOfPage).innerHTML;
@@ -14,6 +33,8 @@ function validateSignInForm(event) {
             if (data.success) {
                 document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
                 localStorage.token = data.token;
+                socket.send(localStorage.getItem('token'))
+				//console.log(yo + ' din token')
                 displayView("userView");
                 attachHandlersUser();
             }
@@ -34,22 +55,29 @@ function validateSignInForm(event) {
 }
 
 function logOutForm(event) {
+	xmlhttp.onreadystatechange = function() {
+        console.log('HejsanSIGNUP');
+        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+            data = JSON.parse(xmlhttp.responseText);
+            console.log(data.token)
+            if (data.success) {
+                displayView("welcomeView");
+                attachHandlersWelcome();
+            }
+            else {
+                document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
+            }
+        }
+    };
 	event.preventDefault();
 
 	var token = localStorage.getItem("token");
-	var logOutCall = serverstub.signOut(token);
-	var logOutSuccess = logOutCall.success;
+	var params = "token="+token;
+	console.log(params);
 
-	if (tokenUserSuccess === false) {
-
-		console.log('Nu loggas du inte ut');
-	}
-	else {
-
-		displayView("welcomeView");
-		attachHandlersWelcome();
-		console.log('Nu loggas du ut');
-	}
+	xmlhttp.open("POST", "/sign_out", true);
+	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xmlhttp.send(params);
 }
 
 function validateSignUpForm(event) {
@@ -64,7 +92,7 @@ function validateSignUpForm(event) {
                 document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
             }
         }
-    }
+    };
     event.preventDefault();
 
 	var password = document.getElementById('password').value;
@@ -111,13 +139,13 @@ function openTab(evt, tabName) {
            }
                 }
 		else {
-				console.log('Da ar vi har');
+
 		}
         }
 		var updateHomeForm = document.getElementById("homeForm");
 		updateHomeForm.addEventListener('submit', validateHomeForm);
 		var token = localStorage.getItem("token");
-		console.log(token);
+		//console.log(token);
 		var params = "token="+token;
 		xmlhttp.open("POST", "/get_user_data_by_token", true);
 		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -184,7 +212,6 @@ function searchUserForm(event) {
 	var searchUserEmail = document.getElementById("searchUserEmail").value;
 	var token = localStorage.getItem("token");
 
-	//searchUserData = serverstub.getUserDataByEmail(token, searchUserEmail);
 
 	var params = "email="+searchUserEmail+"&token="+token;
 
