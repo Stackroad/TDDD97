@@ -5,6 +5,7 @@ import database_helper
 import uuid
 import json
 
+sockets = {}
 # app = Flask('Twidder')
 app = Flask(__name__, static_url_path='')
 app.debug = True
@@ -26,16 +27,34 @@ def root():
     return app.send_static_file('client.html')
 
 @app.route('/socket')
-
 def socket():
     if request.environ.get('wsgi.websocket'):
         ws = request.environ['wsgi.websocket']
         while True:
             message = ws.receive()
-
-            print message
-            ws.send(message)
+            messagedata = json.loads(message)
+            print messagedata
+            token = messagedata['token']
+            print token
+            email = database_helper.get_user_email(token)
+            print email
+            if email in sockets:
+                #returnMessage = json.dumps({'message': 'hastalavista'})
+                sockets[email].send('hastalavista')
+            sockets[email] = ws
     return
+
+    # if 'tjena' == message[]:
+    #   print 'Nu ar vi har'
+    # ws.send(message)
+
+
+# amessage = message.read()
+# messagedata = json.loads(message)
+
+# if (message[0] == )
+# if (token != None)
+# ws.send(message)
 
 
 @app.route('/sign_in', methods=['POST'])

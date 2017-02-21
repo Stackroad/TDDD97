@@ -12,27 +12,32 @@ socket.onerror = function(error) {
   console.log('WebSocket Error: ' + error);
 };
 
+
 socket.onopen = function(event) {
-	if (localStorage.getItem('token') != null)
-		insert = event.currentTarget.URL;
-		console.log('Connected to: ' + insert)
+
 };
 
 socket.onmessage = function(event) {
 	var message = event.data;
-	console.log(message)
+	//incoming = JSON.parse(message);
+	if (message == 'hastalavista') {
+		console.log('TERMINATOR')
+		logOutForm(event)
+	}
 };
+
 
 function validateSignInForm(event) {
 	xmlhttp.onreadystatechange = function() {
-		socket.send('Hejsan SOCKET');
         if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
-            data = JSON.parse(xmlhttp.responseText);
+            var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
                 localStorage.token = data.token;
-                socket.send(localStorage.getItem('token'))
-				//console.log(yo + ' din token')
+                var token = localStorage.getItem('token');
+				var obj = {'token':token};
+				var send2 = JSON.stringify(obj);
+				socket.send(send2);
                 displayView("userView");
                 attachHandlersUser();
             }
@@ -61,6 +66,7 @@ function logOutForm(event) {
             if (data.success) {
                 displayView("welcomeView");
                 attachHandlersWelcome();
+                localStorage.removeItem('token');
             }
             else {
                 document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
@@ -403,7 +409,17 @@ var attachHandlersWelcome = function() {
 
 
 window.onload = function(){
-	displayView("welcomeView");
-	attachHandlersWelcome();
+
+	if (localStorage.getItem('token') == null) {
+		displayView("welcomeView");
+		attachHandlersWelcome();
+	}
+
+	else {
+			displayView("userView");
+			attachHandlersUser();
+	}
+
 
 };
+
