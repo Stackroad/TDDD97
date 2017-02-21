@@ -3,15 +3,19 @@ var data;
 var socket = new WebSocket('ws://127.0.0.1:5000/socket');
 
 
+displayView = function(nameOfPage){
+	var openPage =	document.getElementById(nameOfPage).innerHTML;
+	document.getElementById('body').innerHTML = openPage;
+};
+
 socket.onerror = function(error) {
   console.log('WebSocket Error: ' + error);
 };
 
 socket.onopen = function(event) {
-	//insert = event.currentTarget.URL;
-	console.log('Connected')
-	socket.send(localStorage.getItem('token'))
-	//console.log(yo + ' din token')
+	if (localStorage.getItem('token') != null)
+		insert = event.currentTarget.URL;
+		console.log('Connected to: ' + insert)
 };
 
 socket.onmessage = function(event) {
@@ -19,15 +23,9 @@ socket.onmessage = function(event) {
 	console.log(message)
 };
 
-
-displayView = function(nameOfPage){
-	var openPage =	document.getElementById(nameOfPage).innerHTML;
-	document.getElementById('body').innerHTML = openPage;
-};
-
 function validateSignInForm(event) {
 	xmlhttp.onreadystatechange = function() {
-        console.log('HejsanSIGNUP');
+		socket.send('Hejsan SOCKET');
         if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
             data = JSON.parse(xmlhttp.responseText);
             if (data.success) {

@@ -26,13 +26,16 @@ def root():
     return app.send_static_file('client.html')
 
 @app.route('/socket')
+
 def socket():
     if request.environ.get('wsgi.websocket'):
         ws = request.environ['wsgi.websocket']
         while True:
             message = ws.receive()
+
+            print message
             ws.send(message)
-            return
+    return
 
 
 @app.route('/sign_in', methods=['POST'])
