@@ -24,6 +24,15 @@ def before_request():
 def root():
     return app.send_static_file('client.html')
 
+@app.route('/socket')
+def api():
+    if request.environ.get('wsgi.websocket'):
+        ws = request.environ['wsgi.websocket']
+        while True:
+            message = ws.receive()
+            print message
+            ws.send(message)
+    return
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
