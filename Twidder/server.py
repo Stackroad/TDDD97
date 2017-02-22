@@ -149,7 +149,7 @@ def get_user_data_by_token():
         token = request.form['token']
         result = database_helper.get_user_data_by_token(token)
         if result == False:
-            return 'User data could not be accessed', 501
+            return json.dumps({'success': False, 'message': 'Something went wrong'})
         else:
             return  json.dumps({'success': True, 'message': 'User data is returned',
                                 'email': result[0], 'firstname': result[2],
@@ -166,14 +166,14 @@ def get_user_data_by_email():
         token = request.form['token']
         if token != None:
             result = database_helper.get_user_data_by_email(email)
-            if result == False:
-                return 'User email could not be found in table', 501
+            if result == None:
+                return json.dumps({'success': False, 'message': 'User email could not be found in table', 'messages': 501})
             else:
                 return json.dumps({'success': True, 'message': 'User data is returned', 'email': result[0],
                                    'firstname': result[2], 'familyname': result[3], 'gender': result[4],
                                    'city': result[5], 'country': result[6]})
         else:
-            return 'You are not signed in', 501
+            return json.dumps({'success': False, 'message': 'User email could not be found in table', 'messages': 501})
 
 
 @app.route('/get_user_messages_by_token', methods=['POST'])
