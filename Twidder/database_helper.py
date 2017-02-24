@@ -114,7 +114,7 @@ def sign_out(token):
         return True
     except:
         return False
-        # Lyckas alltid att ta bort fran logged in users, rakna rader istallet?
+ 
 
 def get_user_message_by_token(toUser):
     conn = connect_db()
@@ -134,6 +134,7 @@ def get_user_message_by_token(toUser):
 def post_message(fromUser, message, toUser):
     conn = connect_db()
     data = (fromUser, message, toUser)
+    print data
     try:
         conn.execute('''INSERT INTO  messages  VALUES (?,?,?)''', data)
         conn.commit()
@@ -156,33 +157,13 @@ def get_user_messages_by_email(toUser):
     except:
         return False
 
-def add_user_file(email, path):
+def delete_message(message, toUser):
     conn = connect_db()
-    input_data = (email, path)
+    data = (message, toUser)
+    print data
     try:
-        conn.execute(''' INSERT INTO user_files VALUES(?,?) ''',input_data)
+        conn.execute('''DELETE FROM messages WHERE message=? AND toUser=?''', data)
         conn.commit()
         return True
-    except:
-        return False
-
-def remove_user_file(email):
-    conn = connect_db()
-    input_data = (email,)
-    try:
-        conn.execute('''DELETE FROM user_files WHERE fromUserEmail=?''', input_data)
-        conn.commit()
-        return True
-    except:
-        return False
-
-def get_user_file_path(email):
-    conn = connect_db()
-    cur = conn.cursor()
-    get_path = (email,)
-    try:
-        cur.execute('''SELECT path FROM user_files WHERE fromUserEmail=?''', get_path)
-        result = cur.fetchone()
-        return result[0]
     except:
         return False
