@@ -175,16 +175,3 @@ ul.tab li a:focus, .active {
 	width: 200px;
 }
 
-#drag1 {
-    width: 200px;
-    height: 200px;
-	position: fixed;
-	right: 100px;
-
-}
-/*#trashCan {*/
-	/*width: 200px;*/
-    /*height: 200px;*/
-	/*float: right;*/
-	/*!*background-color: blueviolet;*!*/
-/*}*/
