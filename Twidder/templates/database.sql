@@ -25,8 +25,3 @@ CREATE TABLE if NOT EXISTS  messages(
                             message VARCHAR (120),
                             toUser VARCHAR (120) );
 
-CREATE TABLE if NOT EXISTS  user_files(
-                            fromUserEmail VARCHAR (120),
-                            path VARCHAR (120),
-                            PRIMARY KEY(fromUserEmail) );
-
