@@ -114,7 +114,7 @@ def sign_out(token):
         return True
     except:
         return False
-        # Lyckas alltid att ta bort fran logged in users, rakna rader istallet?
+ 
 
 def get_user_message_by_token(toUser):
     conn = connect_db()
@@ -134,6 +134,7 @@ def get_user_message_by_token(toUser):
 def post_message(fromUser, message, toUser):
     conn = connect_db()
     data = (fromUser, message, toUser)
+    print data
     try:
         conn.execute('''INSERT INTO  messages  VALUES (?,?,?)''', data)
         conn.commit()
@@ -153,5 +154,16 @@ def get_user_messages_by_email(toUser):
         for m in result:
             messages.append(m[0])
         return messages
+    except:
+        return False
+
+def delete_message(message, toUser):
+    conn = connect_db()
+    data = (message, toUser)
+    print data
+    try:
+        conn.execute('''DELETE FROM messages WHERE message=? AND toUser=?''', data)
+        conn.commit()
+        return True
     except:
         return False

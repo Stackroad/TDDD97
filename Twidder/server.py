@@ -213,3 +213,14 @@ def get_user_messages_by_email():
             return json.dumps({'success': True, 'Message': 'This is the retrieved messages', 'Messages': result})
         else:
             return json.dumps({'success': False, 'Message': 'failed'})
+
+@app.route('/delete_message', methods=['POST'])
+def delete_message():
+    if request.method == 'POST':
+        message = request.form['message']
+        toUser = request.form['email']
+        result = database_helper.delete_message(message, toUser)
+        if result == True:
+            return json.dumps({'success': True, 'message': message, 'toUser':toUser,})
+        else:
+            return json.dumps({'success': False, 'message': 'failed'})
