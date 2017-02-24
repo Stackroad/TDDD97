@@ -1,15 +1,25 @@
-from flask import Flask, request, send_from_directory, render_template
+from flask import Flask, request, send_from_directory, url_for
 from validate_email import validate_email
-
+from werkzeug.utils import secure_filename
 import database_helper
 import uuid
 import json
+import os
 
 sockets = {}
 # app = Flask('Twidder')
 app = Flask(__name__, static_url_path='')
 app.debug = True
 
+# This is the path to the upload directory
+UPLOAD_FOLDER = './UploadedFiles/'
+# These are the extension that we are accepting to be uploaded
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp4'])
+
+# For a given file, return whether it's an allowed type or not
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.before_request
 def before_request():
@@ -43,19 +53,6 @@ def socket():
                 sockets[email].send('hastalavista')
             sockets[email] = ws
     return
-
-    # if 'tjena' == message[]:
-    #   print 'Nu ar vi har'
-    # ws.send(message)
-
-
-# amessage = message.read()
-# messagedata = json.loads(message)
-
-# if (message[0] == )
-# if (token != None)
-# ws.send(message)
-
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
@@ -148,12 +145,15 @@ def get_user_data_by_token():
     if request.method == 'POST':
         token = request.form['token']
         result = database_helper.get_user_data_by_token(token)
+        email = database_helper.get_user_email(token)
+        filepath = database_helper.get_user_file_path(email)
         if result == False:
             return json.dumps({'success': False, 'message': 'Something went wrong'})
         else:
             return  json.dumps({'success': True, 'message': 'User data is returned',
                                 'email': result[0], 'firstname': result[2],
-                                'familyname': result[3], 'gender': result[4], 'city': result[5], 'country': result[6]})
+                                'familyname': result[3], 'gender': result[4],
+                                'city': result[5], 'country': result[6], 'filepath': filepath})
 
 
 
@@ -214,13 +214,34 @@ def get_user_messages_by_email():
         else:
             return json.dumps({'success': False, 'Message': 'failed'})
 
-@app.route('/delete_message', methods=['POST'])
-def delete_message():
+@app.route('/upload_file', methods=['POST'])
+def upload_file():
     if request.method == 'POST':
-        message = request.form['message']
-        toUser = request.form['email']
-        result = database_helper.delete_message(message, toUser)
-        if result == True:
-            return json.dumps({'success': True, 'message': message, 'toUser':toUser,})
+        token = request.form['token']
+        file = request.files['data']
+        email = database_helper.get_user_email(token)
+        signedIn = database_helper.get_user_email(token)
+        if signedIn != False:
+            file_path = "./UploadedFiles/" + email + '/'
+            directory = os.path.dirname(file_path)
+            print directory
+            print os.path.exists(directory)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+                print 'created dir'
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(file_path, filename))
+                database_helper.remove_user_file(email)
+                path = file_path + filename
+                database_helper.add_user_file(email, path)
+                return json.dumps({'success': True, 'message': 'Succeded to upload file', 'Messages': 'Messages'})
+            else:
+                return json.dumps({'success': False, 'message': 'failed'})
         else:
             return json.dumps({'success': False, 'message': 'failed'})
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER,
+                               filename)
