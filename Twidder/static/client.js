@@ -19,9 +19,8 @@ socket.onopen = function(event) {
 
 socket.onmessage = function(event) {
     var message = event.data;
-    console.log(message)
     if (message == 'hastalavista') {
-        console.log('TERMINATOR')
+        console.log('TERMINATOR');
         logOutForm(event)
     }
 };
@@ -29,7 +28,7 @@ socket.onmessage = function(event) {
 
 function validateSignInForm(event) {
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
@@ -45,7 +44,7 @@ function validateSignInForm(event) {
                 document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
             }
         }
-    }
+    };
     event.preventDefault();
 
     var emailLogIn = document.getElementById('emailLogIn').value;
@@ -60,13 +59,11 @@ function validateSignInForm(event) {
 
 function logOutForm(event) {
     xmlhttp.onreadystatechange = function() {
-        console.log('HejsanSIGNUP');
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 displayView("welcomeView");
                 attachHandlersWelcome();
-                localStorage.removeItem('token');
             }
             else {
                 document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
@@ -77,7 +74,7 @@ function logOutForm(event) {
 
     var token = localStorage.getItem("token");
     var params = "token="+token;
-
+    localStorage.removeItem('token');
     xmlhttp.open("POST", "/sign_out", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -85,7 +82,7 @@ function logOutForm(event) {
 
 function validateSignUpForm(event) {
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
@@ -139,7 +136,7 @@ function openTab(evt, tabName) {
 
     if (tabName === 'Home') {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 var data = JSON.parse(xmlhttp.responseText);
                 if (data.success) {
                     document.getElementById("firstName").value = data.firstname;
@@ -148,9 +145,6 @@ function openTab(evt, tabName) {
                     document.getElementById("city").value = data.city;
                     document.getElementById("country").value = data.country;
                     document.getElementById("email").value = data.email;
-
-                    document.getElementById("fileStream").innerHTML = "<b>" + data.filepath + "</b>";
-
                     attachHandlersWelcome();
                 }
             }
@@ -173,7 +167,7 @@ function openTab(evt, tabName) {
 
 function validateNewPassForm(event) {
     xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 document.getElementById("alertNewPass").innerHTML = "<b>" + data.message + "</b>";
@@ -195,7 +189,6 @@ function validateNewPassForm(event) {
     var token = localStorage.getItem('token');
     var params = "token=" + token + "&oldPass=" + oldPass + "&newPass=" + newPass + "&repeatNewPass=" + repeatNewPass;
 
-    console.log(params)
     xmlhttp.open("POST", "/change_password", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -205,7 +198,7 @@ function validateNewPassForm(event) {
 
 function searchUserForm(event) {
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 document.getElementById("firstNameSearch").value = data.firstname;
@@ -234,7 +227,7 @@ function searchUserForm(event) {
 
 function postMessageForm(event) {
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 updateWall(data.token, data.toUser);
@@ -263,13 +256,13 @@ function updateWall(token, email) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 var stopCondition = data.Messages.length;
-                for (i = 0; i < stopCondition; i++) {
+                for (i = 0; i <= stopCondition; i++) {
                     var insert = data.Messages[stopCondition-i];
                     if (typeof insert === 'string' || insert instanceof String)
                         document.getElementById("updateWall").innerHTML += "<div id='wallstyleInner'>" +
-                            "<b>Message" + " " + (stopCondition - i) + "</b>" + "<div>" +
+                            "<b>Message" + " " + (stopCondition - i +1) + "</b>" + "<div>" +
                             "<div id='wallstyle'>" + insert +
-                            "<div> <br>";
+                            "<div> ";
                 }
             }
             else {
@@ -279,9 +272,8 @@ function updateWall(token, email) {
 
 
     document.getElementById("updateWall").innerHTML = "<b>The Wall <br></b>";
-
     var params = "token="+token+"&email="+email;
-    console.log(params)
+
     xmlhttp.open("POST", "/get_user_messages_by_email", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -291,18 +283,18 @@ function updateWall(token, email) {
 
 function refreshWall(token, email) {
     xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 var stopCondition = data.Messages.length;
-                for (i = 0; i < stopCondition; i++) {
+                for (i = 0; i <= stopCondition; i++) {
                     var insert = data.Messages[stopCondition-i];
 
                     if (typeof insert === 'string' || insert instanceof String)
-                        document.getElementById("updateWallRefresh").innerHTML += "<div id='wallstyleInner'>" +
-                            "<b>Message" + " " + (stopCondition - i) + "</b>" + "<div>" +
-                            "<div id='wallstyle'>" + insert +
-                            "<div> <br>";
+                        document.getElementById("updateWallRefresh").innerHTML +=
+                            "<div id='wallstyleInner' draggable='true' ondragstart='drag(event)' >" +
+                            "<b>Message" + " " + (stopCondition -i +1) + "</b>" + "<div>" +
+                            "<div id='wallstyle' >" + insert + "</div> ";
                 }
             }
             else {
@@ -319,6 +311,10 @@ function refreshWall(token, email) {
 
 }
 
+//
+// <img id="drag1" src="img_logo.png" draggable="true"
+// 				ondragstart="drag(event)" width="336" height="69">
+
 
 function validateHomeForm(event) {
     event.preventDefault();
@@ -329,27 +325,6 @@ function validateHomeForm(event) {
     refreshWall(token, emailHome);
 }
 
-function uploadFileAction(event) {
-    event.preventDefault();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            var data = JSON.parse(xmlhttp.responseText);
-            console.log(data.message)
-            if (data.success) {
-
-                }
-            }
-            else {
-            }
-        };
-    var formdata = new FormData();
-    var file = document.getElementById("fileToUpload").files[0];
-    formdata.append("data", file);
-    var token = localStorage.getItem("token");
-    formdata.append("token",token);
-    xmlhttp.open("POST", "/upload_file", true);
-    xmlhttp.send(formdata);
-}
 
 var attachHandlersHome = function() {
 
@@ -364,7 +339,6 @@ var attachHandlersUser = function() {
     var logOutPush = document.getElementById("logOut");
     var searchUserPush = document.getElementById("browseUser");
     var postMessage = document.getElementById("postMessage");
-    var uploadFile = document.getElementById("uploadFileForm");
 
     if (searchUserPush != null) {
         searchUserPush.addEventListener('submit', searchUserForm);
@@ -377,9 +351,6 @@ var attachHandlersUser = function() {
     }
     if (postMessage != null) {
         postMessage.addEventListener('submit', postMessageForm);
-    }
-    if (uploadFile != null) {
-        uploadFile.addEventListener('submit', uploadFileAction);
     }
     // if (postMessage != null) {
     // 	postMessage.addEventListener('submit', postMessageForm);
