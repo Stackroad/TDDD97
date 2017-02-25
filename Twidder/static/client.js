@@ -285,8 +285,6 @@ function updateWall(token, email) {
     xmlhttp.open("POST", "/get_user_messages_by_email", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
-
-
 }
 
 function refreshWall(token, email) {
@@ -336,7 +334,7 @@ function uploadFileAction(event) {
             var data = JSON.parse(xmlhttp.responseText);
             console.log(data.message)
             if (data.success) {
-
+                updateFile();
                 }
             }
             else {
@@ -350,6 +348,25 @@ function uploadFileAction(event) {
     xmlhttp.open("POST", "/upload_file", true);
     xmlhttp.send(formdata);
 }
+
+updateFile = function() {
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var data = JSON.parse(xmlhttp.responseText);
+            if (data.success) {
+                document.getElementById("fileStream").innerHTML = "<b>Mottagit en updateFile func <br></b>";
+                console.log(data)
+            }
+        }
+        else {
+            document.getElementById("fileStream").innerHTML = "<b>Mottagit en updateFile func FAIL <br></b>";
+        }
+    };
+    var token = localStorage.getItem("token");
+    var params = "token="+token;
+    xmlhttp.open("POST", "/get_file", true);
+    xmlhttp.send(params);
+    };
 
 var attachHandlersHome = function() {
 

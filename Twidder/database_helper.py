@@ -1,5 +1,6 @@
 __author__ = 'Per och Matte'
 import sqlite3
+import base64
 from flask import g
 
 DATABASE = 'database.db'
@@ -160,6 +161,9 @@ def add_user_file(email, path):
     conn = connect_db()
     input_data = (email, path)
     try:
+        test = []
+        pathen = path
+        media = pathen.rsplit('.', 2)[2]
         conn.execute(''' INSERT INTO user_files VALUES(?,?) ''',input_data)
         conn.commit()
         return True

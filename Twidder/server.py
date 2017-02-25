@@ -5,6 +5,7 @@ import database_helper
 import uuid
 import json
 import os
+import base64
 
 sockets = {}
 # app = Flask('Twidder')
@@ -222,7 +223,7 @@ def upload_file():
         email = database_helper.get_user_email(token)
         signedIn = database_helper.get_user_email(token)
         if signedIn != False:
-            file_path = "./UploadedFiles/" + email + '/'
+            file_path = UPLOAD_FOLDER + email + '/'
             directory = os.path.dirname(file_path)
             print directory
             print os.path.exists(directory)
@@ -230,6 +231,7 @@ def upload_file():
                 os.makedirs(directory)
                 print 'created dir'
             if file and allowed_file(file.filename):
+                print file.filename
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(file_path, filename))
                 database_helper.remove_user_file(email)
@@ -238,6 +240,27 @@ def upload_file():
                 return json.dumps({'success': True, 'message': 'Succeded to upload file', 'Messages': 'Messages'})
             else:
                 return json.dumps({'success': False, 'message': 'failed'})
+        else:
+            return json.dumps({'success': False, 'message': 'failed'})
+
+@app.route('/get_file', methods=['POST'])
+def get_file():
+    if request.method == 'POST':
+        token = request.form['token']
+        email = database_helper.get_user_email(token)
+        signedIn = database_helper.get_user_email(token)
+        print 'Hello'
+        if signedIn != False:
+            returned_file = []
+            path = database_helper.get_user_file_path(email)
+            file_type = path.rsplit('.', 2)[2]
+            print file_type
+            print path
+            with open(path) as image_file:
+                encoded_string = base64.b64encode(image_file.read())
+                returned_file.append([encoded_string, file_type])
+            print returned_file
+            return json.dumps({'success': True, 'message': 'Succeded to upload file', 'data': returned_file})
         else:
             return json.dumps({'success': False, 'message': 'failed'})
 

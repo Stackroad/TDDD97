@@ -133,17 +133,12 @@
 
 				<div id="fileStream">
 
-				</div>
-
 				<video width="320" height="240" controls>
- 					<source src="./Twidder/templates/UploadedFiles/u@gmail.com/alefant.mp4" type="video/mp4">
+ 					<source src="test/movie.mp4" type="video/mp4">
 					Your browser does not support the video tag.
 				</video>
-C:\Users\Per\PyCharmFlaskVirt\Twidder\UploadedFiles\u@gmail.com
-				<img src="./templates/UploadedFiles/u@gmail.com/apa.jpg" alt="Mountain View" style="width:304px;height:228px;">
 
-				<img src="{{url_for('u@gmail.com', filename='apa.jpg')}}" />
-
+				</div>
 				<form action="upload.php" method="post" enctype="multipart/form-data" id="uploadFileForm">
     				Select image to upload:
    					<input type="file" name="fileToUpload" id="fileToUpload">
@@ -151,7 +146,8 @@ C:\Users\Per\PyCharmFlaskVirt\Twidder\UploadedFiles\u@gmail.com
 				</form>
 
 				<div id="updateWallRefresh">
-
+					<h1>some text <img src="{{ url_for('uploaded_file', filename=apa.jpg) }}">more text!</h1>
+					<img src="{{url_for('send_file', filename='apa.jpg') }}">
 					<h1>HELLO</h1>
 				</div>
 			</div>
