@@ -1,9 +1,8 @@
 __author__ = 'Per och Matte'
 import sqlite3
-import base64
 from flask import g
 
-DATABASE = 'database.db'
+DATABASE = 'database2.db'
 
 
 def connect_db():
@@ -19,9 +18,10 @@ def get_db():
 
 def add_user(email, password, firstname, familyname, gender, city, country):
     conn = connect_db()
-    userdata = (email, password, firstname, familyname, gender, city, country)
+    search = 0
+    userdata = (email, password, firstname, familyname, gender, city, country, search)
     try:
-        conn.execute(''' INSERT INTO users VALUES(?,?,?,?,?,?,?) ''',userdata)
+        conn.execute(''' INSERT INTO users VALUES(?,?,?,?,?,?,?,?) ''',userdata)
         conn.commit()
         return True
     except:
@@ -91,6 +91,20 @@ def sign_in_user(token, email):
         return False
 
 
+def logged_in_users():
+    conn = connect_db()
+    cur = conn.cursor()
+    try:
+        cur.execute('''SELECT email FROM logged_in_users2 ''')
+        result = cur.fetchall()
+        logged_in = []
+        for m in result:
+            logged_in.append(m[0])
+        return logged_in
+    except:
+        return False
+
+
 def new_password(new_password, email):
     conn = connect_db()
     user_data = (new_password, email)
@@ -115,7 +129,7 @@ def sign_out(token):
         return True
     except:
         return False
-        # Lyckas alltid att ta bort fran logged in users, rakna rader istallet?
+
 
 def get_user_message_by_token(toUser):
     conn = connect_db()
@@ -135,6 +149,7 @@ def get_user_message_by_token(toUser):
 def post_message(fromUser, message, toUser):
     conn = connect_db()
     data = (fromUser, message, toUser)
+    print data
     try:
         conn.execute('''INSERT INTO  messages  VALUES (?,?,?)''', data)
         conn.commit()
@@ -154,6 +169,17 @@ def get_user_messages_by_email(toUser):
         for m in result:
             messages.append(m[0])
         return messages
+    except:
+        return False
+
+def delete_message(message, toUser):
+    conn = connect_db()
+    data = (message, toUser)
+    print data
+    try:
+        conn.execute('''DELETE FROM messages WHERE message=? AND toUser=?''', data)
+        conn.commit()
+        return True
     except:
         return False
 
@@ -180,6 +206,7 @@ def remove_user_file(email):
     except:
         return False
 
+
 def get_user_file_path(email):
     conn = connect_db()
     cur = conn.cursor()
@@ -187,6 +214,30 @@ def get_user_file_path(email):
     try:
         cur.execute('''SELECT path FROM user_files WHERE fromUserEmail=?''', get_path)
         result = cur.fetchone()
+        return result[0]
+    except:
+        return False
+
+
+def search_user_update(email):
+    conn = connect_db()
+    data = email,
+    try:
+        conn.execute('''UPDATE users SET search = search + 1 WHERE email=?''', data)
+        conn.commit()
+        return True
+    except:
+        return False
+
+
+def search_user_get(email):
+    conn = connect_db()
+    cur = conn.cursor()
+    data = (email,)
+    try:
+        cur.execute('''SELECT search FROM users WHERE email=?''', data)
+        result = cur.fetchone()
+        print result
         return result[0]
     except:
         return False

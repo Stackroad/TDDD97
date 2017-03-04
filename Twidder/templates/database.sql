@@ -12,7 +12,9 @@ CREATE TABLE if NOT EXISTS users(
                    gender VARCHAR(120),
                    city VARCHAR(120),
                    country VARCHAR(120),
+                   search VARCHAR (120),
                    PRIMARY KEY(email) );
+
 
 
 CREATE TABLE if NOT EXISTS  logged_in_users2(
@@ -30,3 +32,7 @@ CREATE TABLE if NOT EXISTS  user_files(
                             path VARCHAR (120),
                             PRIMARY KEY(fromUserEmail) );
 
+CREATE TABLE if NOT EXISTS  search_table(
+                            email VARCHAR (120),
+                            search VARCHAR (120),
+                            PRIMARY KEY(email) );

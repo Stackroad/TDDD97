@@ -1,10 +1,10 @@
 var xmlhttp = new XMLHttpRequest();
 var data;
 var socket = new WebSocket('ws://127.0.0.1:5000/socket');
-
+var currentTab;
 
 displayView = function(nameOfPage){
-    var openPage =	document.getElementById(nameOfPage).innerHTML;
+    openPage =	document.getElementById(nameOfPage).innerHTML;
     document.getElementById('body').innerHTML = openPage;
 };
 
@@ -19,17 +19,24 @@ socket.onopen = function(event) {
 
 socket.onmessage = function(event) {
     var message = event.data;
-    console.log(message)
     if (message == 'hastalavista') {
-        console.log('TERMINATOR')
+        console.log('TERMINATOR');
         logOutForm(event)
+    }
+    var data =  JSON.parse(message)
+    console.log(data)
+    if (data.type == 'stats'){
+        message_count = data.posts;
+        online_users = data.online;
+        searched_user = data.searched;
+        console.log(searched_user);
+        updateData(message_count, online_users, searched_user);
     }
 };
 
-
 function validateSignInForm(event) {
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
@@ -39,13 +46,15 @@ function validateSignInForm(event) {
                 var send2 = JSON.stringify(obj);
                 socket.send(send2);
                 displayView("userView");
+                initChart()
                 attachHandlersUser();
+
             }
             else {
                 document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
             }
         }
-    }
+    };
     event.preventDefault();
 
     var emailLogIn = document.getElementById('emailLogIn').value;
@@ -60,13 +69,11 @@ function validateSignInForm(event) {
 
 function logOutForm(event) {
     xmlhttp.onreadystatechange = function() {
-        console.log('HejsanSIGNUP');
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 displayView("welcomeView");
                 attachHandlersWelcome();
-                localStorage.removeItem('token');
             }
             else {
                 document.getElementById("alertSignIn").innerHTML = "<b>" + data.message + "</b>";
@@ -77,7 +84,7 @@ function logOutForm(event) {
 
     var token = localStorage.getItem("token");
     var params = "token="+token;
-
+    localStorage.removeItem('token');
     xmlhttp.open("POST", "/sign_out", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -85,7 +92,7 @@ function logOutForm(event) {
 
 function validateSignUpForm(event) {
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 document.getElementById("alertSignUp").innerHTML = "<b>" + data.message + "</b>";
@@ -136,10 +143,11 @@ function openTab(evt, tabName) {
     }
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
+    currentTab = tabName;
 
     if (tabName === 'Home') {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 var data = JSON.parse(xmlhttp.responseText);
                 if (data.success) {
                     document.getElementById("firstName").value = data.firstname;
@@ -148,9 +156,7 @@ function openTab(evt, tabName) {
                     document.getElementById("city").value = data.city;
                     document.getElementById("country").value = data.country;
                     document.getElementById("email").value = data.email;
-
-                    document.getElementById("fileStream").innerHTML = "<b>" + data.filepath + "</b>";
-
+                    updateFile();
                     attachHandlersWelcome();
                 }
             }
@@ -163,9 +169,15 @@ function openTab(evt, tabName) {
         var token = localStorage.getItem("token");
         var params = "token=" + token;
 
+
+
         xmlhttp.open("POST", "/get_user_data_by_token", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send(params);
+    }
+    if (tabName == 'Charts'){
+
+
     }
 
 }
@@ -173,7 +185,7 @@ function openTab(evt, tabName) {
 
 function validateNewPassForm(event) {
     xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 document.getElementById("alertNewPass").innerHTML = "<b>" + data.message + "</b>";
@@ -195,7 +207,6 @@ function validateNewPassForm(event) {
     var token = localStorage.getItem('token');
     var params = "token=" + token + "&oldPass=" + oldPass + "&newPass=" + newPass + "&repeatNewPass=" + repeatNewPass;
 
-    console.log(params)
     xmlhttp.open("POST", "/change_password", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -205,7 +216,7 @@ function validateNewPassForm(event) {
 
 function searchUserForm(event) {
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 document.getElementById("firstNameSearch").value = data.firstname;
@@ -215,17 +226,22 @@ function searchUserForm(event) {
                 document.getElementById("countrySearch").value = data.country;
                 document.getElementById("emailSearch").value = data.email;
                 document.getElementById("alertSearch").innerHTML ='';
+
+
+                updateFile();
+                //updateWall(token, searchUserEmail); //media syns inte nar denna ar med
+
             }
             else {
- 				document.getElementById("alertSearch").innerHTML = "<b>" + data.message + "</b>";
+                document.getElementById("alertSearch").innerHTML = "<b>" + data.message + "</b>";
             }
         }
     };
     event.preventDefault();
-
     var searchUserEmail = document.getElementById("searchUserEmail").value;
     var token = localStorage.getItem("token");
     var params = "email="+searchUserEmail+"&token="+token;
+
 
     xmlhttp.open("POST", "/get_user_data_by_email", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -234,10 +250,12 @@ function searchUserForm(event) {
 
 function postMessageForm(event) {
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 updateWall(data.token, data.toUser);
+
+
             }
             else {
 
@@ -254,7 +272,6 @@ function postMessageForm(event) {
     xmlhttp.open("POST", "/post_message", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
-
 }
 
 function updateWall(token, email) {
@@ -263,44 +280,46 @@ function updateWall(token, email) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 var stopCondition = data.Messages.length;
-                for (i = 0; i < stopCondition; i++) {
+                for (i = 0; i <= stopCondition; i++) {
                     var insert = data.Messages[stopCondition-i];
                     if (typeof insert === 'string' || insert instanceof String)
                         document.getElementById("updateWall").innerHTML += "<div id='wallstyleInner'>" +
-                            "<b>Message" + " " + (stopCondition - i) + "</b>" + "<div>" +
+                            "<b>Message" + " " + (stopCondition - i +1) + "</b>" + "<div>" +
                             "<div id='wallstyle'>" + insert +
-                            "<div> <br>";
+                            "<div> ";
                 }
             }
             else {
+
+
             }
         }
     };
 
 
     document.getElementById("updateWall").innerHTML = "<b>The Wall <br></b>";
-
     var params = "token="+token+"&email="+email;
-    console.log(params)
     xmlhttp.open("POST", "/get_user_messages_by_email", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
+
+
 }
 
 function refreshWall(token, email) {
     xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
                 var stopCondition = data.Messages.length;
-                for (i = 0; i < stopCondition; i++) {
+                for (i = 0; i <= stopCondition; i++) {
                     var insert = data.Messages[stopCondition-i];
 
                     if (typeof insert === 'string' || insert instanceof String)
-                        document.getElementById("updateWallRefresh").innerHTML += "<div id='wallstyleInner'>" +
-                            "<b>Message" + " " + (stopCondition - i) + "</b>" + "<div>" +
-                            "<div id='wallstyle'>" + insert +
-                            "<div> <br>";
+                        document.getElementById("updateWallRefresh").innerHTML +=
+                            "<div id='wallstyleInner' draggable='true' ondragstart='drag(event)' >" +
+                            "<b>Message" + " " + (stopCondition -i +1) + "</b>" + "<div>" +
+                            "<div id='wallstyle' >" + insert + "</div> ";
                 }
             }
             else {
@@ -317,6 +336,10 @@ function refreshWall(token, email) {
 
 }
 
+//
+// <img id="drag1" src="img_logo.png" draggable="true"
+// 				ondragstart="drag(event)" width="336" height="69">
+
 
 function validateHomeForm(event) {
     event.preventDefault();
@@ -332,41 +355,93 @@ function uploadFileAction(event) {
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
-            console.log(data.message)
+            console.log(data.message);
             if (data.success) {
                 updateFile();
-                }
             }
-            else {
-            }
-        };
+        }
+        else {
+        }
+    };
     var formdata = new FormData();
     var file = document.getElementById("fileToUpload").files[0];
     formdata.append("data", file);
     var token = localStorage.getItem("token");
     formdata.append("token",token);
+
+
     xmlhttp.open("POST", "/upload_file", true);
     xmlhttp.send(formdata);
 }
+
+
 
 updateFile = function() {
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var data = JSON.parse(xmlhttp.responseText);
             if (data.success) {
-                document.getElementById("fileStream").innerHTML = "<b>Mottagit en updateFile func <br></b>";
-                console.log(data)
+                if (data.data[0][1] == "mp4"){
+                    if (currentTab == "Browse") {
+                        document.getElementById("fileStreamSearch").innerHTML =
+                            "<video  width=320 height=240 controls>" +
+                            "<source  type=video/mp4 src=\"data:image/" + data.data[0][1] + ";base64," + data.data[0][0] + "\" />"
+                            +"</video>"
+
+                    }
+                    else {
+                        document.getElementById("fileStream").innerHTML =
+                            "<video  width=320 height=240 controls>" +
+                            "<source  type=video/mp4 src=\"data:image/" + data.data[0][1] + ";base64," + data.data[0][0] + "\" />"
+                            + "</video>"
+                    }
+                }
+                else if (data.data[0][1] == "ogg") {
+                    if (currentTab == "Browse") {
+                        document.getElementById("fileStreamSearch").innerHTML =
+                            "<audio controls>" +
+                            "<source  type=audio/ogg src=\"data:image/" + data.data[0][1] + ";base64," + data.data[0][0] + "\" />"
+                            + "</audio>"
+                    }
+                    else {
+
+                        document.getElementById("fileStream").innerHTML =
+                            "<audio controls>" +
+                            "<source  type=audio/ogg src=\"data:image/" + data.data[0][1] + ";base64," + data.data[0][0] + "\" />"
+                            + "</audio>"
+                    }
+                }
+                else {
+                    if (currentTab == "Browse") {
+                        document.getElementById("fileStreamSearch").innerHTML =
+                            "<img src=\"data:image/" + data.data[0][1] + ";base64," + data.data[0][0] + "\" />";
+                    }
+                    else{
+                    } document.getElementById("fileStream").innerHTML =
+                        "<img src=\"data:image/" + data.data[0][1] + ";base64," + data.data[0][0] + "\" />";
+                }
             }
         }
         else {
             document.getElementById("fileStream").innerHTML = "<b>Mottagit en updateFile func FAIL <br></b>";
         }
     };
-    var token = localStorage.getItem("token");
-    var params = "token="+token;
-    xmlhttp.open("POST", "/get_file", true);
+    var params;
+    if (currentTab == 'Home'){
+        var token = localStorage.getItem("token");
+         params = "token="+token;
+        xmlhttp.open("POST", "/get_file", true);
+    }
+    else {
+        var email = document.getElementById("emailSearch").value;
+         params = "email="+email;
+        xmlhttp.open("POST", "/get_file_by_email", true);
+    }
+
+
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
-    };
+};
 
 var attachHandlersHome = function() {
 
@@ -401,6 +476,7 @@ var attachHandlersUser = function() {
     // if (postMessage != null) {
     // 	postMessage.addEventListener('submit', postMessageForm);
     // }
+
 };
 
 
@@ -428,6 +504,7 @@ window.onload = function(){
 
     if (localStorage.getItem('token') == null) {
         displayView("welcomeView");
+
         attachHandlersWelcome();
     }
 

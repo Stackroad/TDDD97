@@ -5,6 +5,9 @@
 	<meta charset="utf-8">
 	<link href="client.css" type="text/css" rel="stylesheet">
 	<script src="client.js" type="text/javascript"></script>
+	<script src="dragdrop.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+	<script src="chart.js" type="text/javascript"></script>
 
 	<script type="text/view" id="welcomeView">
 		<div class="container">
@@ -82,7 +85,7 @@
 			</form>
 
 		</div>
-	</script>	
+	</script>
 	<script type="text/view" id="userView">
 
 		<h1>HEJSAN USER</h1>
@@ -94,6 +97,7 @@
 				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Home')">Home</a></li>
 				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Browse')">Browse</a></li>
 				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Account')">Account</a></li>
+				<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Charts')">Charts</a></li>
 			</ul>
 
 			<div id="Home" class="tabcontent">
@@ -131,26 +135,31 @@
 
 				</form>
 
-				<div id="fileStream">
 
-				<video width="320" height="240" controls>
- 					<source src="test/movie.mp4" type="video/mp4">
-					Your browser does not support the video tag.
-				</video>
-
+				<div id="trashCan"  ondrop="drop(event)" ondragover="allowDrop(event)">
+				<img id="drag1" src="trashcan.png" draggable="false">
 				</div>
-				<form action="upload.php" method="post" enctype="multipart/form-data" id="uploadFileForm">
-    				Select image to upload:
-   					<input type="file" name="fileToUpload" id="fileToUpload">
-    				<input type="submit" value="Upload Image" name="submit">
-				</form>
 
 				<div id="updateWallRefresh">
-					<h1>some text <img src="{{ url_for('uploaded_file', filename=apa.jpg) }}">more text!</h1>
-					<img src="{{url_for('send_file', filename='apa.jpg') }}">
-					<h1>HELLO</h1>
+
+
 				</div>
+
+				<form action="upload.php" method="POST" enctype="multipart/form-data" id="uploadFileForm">
+    				Upload media: <br>
+   					<input type="file" name="fileToUpload" id="fileToUpload"> <br>
+    				<input type="submit" value="Upload Media" name="submit">
+
+    				<div id="fileStream">
+
+				</div>
+
+				</form>
+
 			</div>
+
+
+
 
 			<div id="Browse" class="tabcontent">
 				<h3>Browse</h3>
@@ -216,6 +225,11 @@
 
 					<h1>HELLO</h1>
 				</div>
+
+				<div id="fileStreamSearch">
+
+				</div>
+
 				
 
 
@@ -253,10 +267,20 @@
 				</div>
 
 			</div>
-		</script>	
-	</head>
 
-	<body id="body" >
+			<div id="Charts" class="tabcontent">
 
-	</body>
-	</html>
+				 <canvas id="myChart"></canvas>
+
+
+
+
+			</div>
+
+		</script>
+</head>
+
+<body id="body" >
+
+</body>
+</html>

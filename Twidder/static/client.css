@@ -163,6 +163,11 @@ ul.tab li a:focus, .active {
 	float: left;
 }
 
+#updateWall{
+	clear: left;
+	float: left;
+}
+
 #wallstyle{
 	width: 200px;
 	height: 150px;
@@ -175,3 +180,49 @@ ul.tab li a:focus, .active {
 	width: 200px;
 }
 
+#drag1 {
+    width: 100px;
+    height: 100px;
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+
+}
+/*#trashCan {*/
+	/*width: 200px;*/
+    /*height: 200px;*/
+	/*float: right;*/
+	/*!*background-color: blueviolet;*!*/
+/*}*/
+
+#fileStream{
+    width: 100%;
+    margin-bottom: 10px;
+	float: right;
+	height: 100%;
+
+
+}
+#fileStreamSearch{
+    width: 100%;
+    margin-bottom: 10px;
+	float: right;
+	height: 100%;
+
+}
+#myChart {
+    margin:20px;
+	width:400px;
+	height:400px;
+	overflow: hidden;
+}
+
+#uploadFileForm {
+	float: right;
+}
+
+/*.Charts {*/
+	/*box-sizing:border-box;*/
+  	/*margin:2%;*/
+ 	 /*width:96%;*/
+/*}*/
